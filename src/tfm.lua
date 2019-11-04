@@ -1,3 +1,5 @@
+local Object = require 'Object'
+
 local tfm = {
   enum = {
     emote = {
@@ -146,12 +148,19 @@ local tfm = {
       objectList = {},
       passwordProtected = false,
       playerList = {}
+    },
+    --[[WARNING!!!: data field is not related with tfm's module API]]--
+    data = {
+      chatMessages = {}
     }
   }
 }
 
 function tfm.exec.addConjuration(xPosition, yPosition, duration)
-  error('Not implemented')
+  assert(type(xPosition) == 'number', 'Expected type of number for xPosition, instead got ' .. type(xPosition))
+  assert(type(yPosition) == 'number', 'Expected type of number for yPosition, instead got ' .. type(yPosition))
+  assert(type(duration) == 'number' or duration == nil, 'Expected type of number or nil for duration, instead got ' .. type(duration))
+  print('[Map: Conjuration]\tX: ' .. xPosition .. ' | Y: ' .. yPosition .. ' | duration: ' .. (duration or 10000) .. 's \t(tfm.exec.addConjuration)')
 end
 
 function tfm.exec.addImage(imageId, target, xPosition, yPosition, targetPlayer)
@@ -163,7 +172,14 @@ function tfm.exec.addJoint(id, ground1, ground2, jointDef)
 end
 
 function tfm.exec.addPhysicObject(id, xPosition, yPosition, bodyDef)
-  error('Not implemented')
+
+  assert(type(xPosition) == 'number', 'Expected type of number for xPosition, instead got ' .. type(xPosition))
+  assert(type(yPosition) == 'number', 'Expected type of number for yPosition, instead got ' .. type(yPosition))
+  assert(type(bodyDef) == 'table', 'Expected type of table for bodyDef, instead got ' .. type(bodyDef))
+
+  tfm.get.room.objectList[id] = Object.new(id, xPosition, yPosition, bodyDef)
+  print('[Map: (+)Phy Obj]\tID: ' .. id .. ' | X: ' .. xPosition .. ' | Y: ' .. yPosition .. ' ...\t\t(tfm.exec.addPhysicObject)')
+
 end
 
 function tfm.exec.addShamanObject(objectType, xPosition, yPosition, angle, xSpeed, ySpeed, ghost)
@@ -175,7 +191,10 @@ function tfm.exec.changePlayerSize(playerName, size)
 end
 
 function tfm.exec.chatMessage(message, playerName)
-  error('Not implemented')
+  assert(type(playerName) == 'string' or playerName == nil, 'Expected type of string or nil for playerName, instead got ' .. type(playerName))
+  table.insert(tfm.get.data, {message, playerName})
+  print('[Room: Chat message]\ttarget: ' .. (playerName or 'All') .. '\t\t\t\t(tfm.exec.chatMessage)')
+  print(message)
 end
 
 function tfm.exec.disableAfkDeath(activate)
@@ -251,7 +270,11 @@ function tfm.exec.giveTransformations(playerName, canTransform)
 end
 
 function tfm.exec.killPlayer(playerName)
-  error('Not implemented')
+  assert(type(playerName) == 'string', 'Expected type of string for playerName, instead got ' .. type(playerName))
+  if (tfm.get.room.playerList[playerName]) then
+    tfm.get.room.playerList[playerName].isDead = true
+  end
+  print('[Game: Kill]\t\tplayer: ' .. playerName .. ' | success: ' .. tostring(not not tfm.get.room.playerList[playerName]) .. '\t\t(tfm.exec.killPlayer)')
 end
 
 function tfm.exec.linkMice(playerName1, playerName2, linked)
@@ -323,11 +346,13 @@ function tfm.exec.setPlayerScore(playerName, score, add)
 end
 
 function tfm.exec.setRoomMaxPlayers(maxPlayers)
-  error('Not implemented')
+  assert(type(maxPlayers) == 'number', 'Expected type of number for maxPlayers, instead got ' .. type(maxPlayers))
+  tfm.get.room.maxPlayers = maxPlayers
+  print('[Room: Max players]\tmaxPlayers: ' .. maxPlayers .. '\t\t\t\t(tfm.exec.setRoomMaxPlayers)')
 end
 
 function tfm.exec.setRoomPassword(password)
-  print('[Room: ' .. (password == '' and 'Unset' or 'Set') .. ' password]\t password: ' .. password .. '\t\t(tfm.exec.setRoomPassword)')
+  print('[Room: ' .. (password == '' and 'Unset' or 'Set') .. ' password]\tpassword: ' .. password .. '\t\t\t\t(tfm.exec.setRoomPassword)')
   tfm.get.room.passwordProtected = password ~= ''
 end
 
@@ -343,7 +368,9 @@ function tfm.exec.setVampirePlayer(playerName, makeAVampire)
   error('Not implemented')
 end
 
-function tfm.exec.snow(duration, snowballPower)
+function tfm.exec.snow(duration, snowBallPower)
+  assert(type(duration) == 'number' or duration == nil, "Expected type of number or nil for duration, instead got " .. type(duration))
+  assert(type(snowBallPower) == 'number' or snowBallPower == nil, "Expected type of number or nil for snowBallPower, instead got " .. type(snowBallPower))
   print('[Room: Snowing]\t\tduration: ' .. (duration or 60) .. 's | Snow Power: ' .. (snowBallPower or 10) .. '\t\t(tfm.exec.snow)')
 end
 

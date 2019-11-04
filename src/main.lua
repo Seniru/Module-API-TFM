@@ -3,32 +3,16 @@ local Object = require 'Object'
 local events = require 'events'
 local tfm = require 'tfm'
 
-sen = Player.new('seniru', {gender='male', tribe='We talk a lot'})
-oj = Player.new('overjoy', {tribe='wtal'})
-
-print('\n===Testing Players===')
-
-print(sen.playerName)
-print(oj.gender)
-
-print('\n===Testing Objects===')
-
-obj1 = Object.new(1, 12, {ghost=true, colors={0xff0000}})
-obj2 = Object.new(2, 32, {baseType=3})
-
-print(obj1.colors[1])
-print(obj2.id)
-
-print('\n===Testing Enums===')
-
-print(tfm.enum.emote.flag)
-print(tfm.enum.ground.sand)
-print(tfm.enum.particle.spirit)
-print(tfm.enum.shamanObject.box)
 
 print('\n===Testing tfm.exec methods==\n')
+
+tfm.get.room.playerList['Seniru'] = Player.new('Seniru', {})
 
 tfm.exec.snow()
 tfm.exec.snow(10)
 tfm.exec.setRoomPassword('pass')
-print(tfm.get.room.passwordProtected)
+tfm.exec.setRoomMaxPlayers(50)
+tfm.exec.addConjuration(32,43)
+tfm.exec.addPhysicObject(0, 50, 60, {type=3})
+tfm.exec.chatMessage('Hello, this is my first time testing chat message')
+tfm.exec.killPlayer('Seniru')

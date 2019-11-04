@@ -17,7 +17,7 @@ function Player.new(name, config)
   self.hasCheese = not not config.hasCheese
   self.id = config.id or 0
   self.inHardMode = config.inHardMode or 0
-  self.isDead = config.isDead or true
+  self.isDead = config.isDead or false
   self.isFacingRight = not not config.isFacingRight
   self.isInvoking = not not config.isInvoking
   self.isJumping = false

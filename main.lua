@@ -1,7 +1,7 @@
-local Player = require 'Player'
-local Object = require 'Object'
-local events = require 'events'
-local tfm = require 'tfm'
+local Player = require 'src.Player'
+local Object = require 'src.Object'
+local events = require 'src.events'
+local tfm = require 'src.tfm'
 
 
 print('\n===Testing tfm.exec methods==\n')

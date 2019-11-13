@@ -1,4 +1,4 @@
-local Config = require 'Config'
+local Config = require 'src.Config'
 
 --[==[
   @type class

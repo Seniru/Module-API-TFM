@@ -1,5 +1,5 @@
-local Object = require 'Object'
-local escapes = require 'escapes'
+local Object = require 'src.Object'
+local escapes = require 'src.escapes'
 
 local tfm = {
   enum = {
@@ -161,7 +161,7 @@ function tfm.exec.addConjuration(xPosition, yPosition, duration)
   assert(type(xPosition) == 'number', 'Expected type of number for xPosition, instead got ' .. type(xPosition))
   assert(type(yPosition) == 'number', 'Expected type of number for yPosition, instead got ' .. type(yPosition))
   assert(type(duration) == 'number' or duration == nil, 'Expected type of number or nil for duration, instead got ' .. type(duration))
-  print(label('[Map: Conjuration]') .. '\tX: ' .. xPosition .. ' | Y: ' .. yPosition .. ' | duration: ' .. (duration or 10000) .. 's \t(tfm.exec.addConjuration)')
+  print(label('[Map: Conjuration]') .. '\tX: ' .. xPosition .. ' | Y: ' .. yPosition .. ' | duration: ' .. (duration or 10000) .. 's \t' .. func('(tfm.exec.addConjuration)'))
 end
 
 function tfm.exec.addImage(imageId, target, xPosition, yPosition, targetPlayer)
@@ -179,8 +179,7 @@ function tfm.exec.addPhysicObject(id, xPosition, yPosition, bodyDef)
   assert(type(bodyDef) == 'table', 'Expected type of table for bodyDef, instead got ' .. type(bodyDef))
 
   tfm.get.room.objectList[id] = Object.new(id, xPosition, yPosition, bodyDef)
-  print(label('[Map: (+)Phy Obj]') .. '\tID: ' .. id .. ' | X: ' .. xPosition .. ' | Y: ' .. yPosition .. ' ...\t\t(tfm.exec.addPhysicObject)')
-
+  print(label('[Map: (+)Phy Obj]') .. '\tID: ' .. id .. ' | X: ' .. xPosition .. ' | Y: ' .. yPosition .. ' ...\t\t' .. func('(tfm.exec.addPhysicObject)'))
 end
 
 function tfm.exec.addShamanObject(objectType, xPosition, yPosition, angle, xSpeed, ySpeed, ghost)
@@ -194,7 +193,7 @@ end
 function tfm.exec.chatMessage(message, playerName)
   assert(type(playerName) == 'string' or playerName == nil, 'Expected type of string or nil for playerName, instead got ' .. type(playerName))
   table.insert(tfm.get.data, {message, playerName})
-  print(label('[Room: Chat message]') .. '\ttarget: ' .. (playerName or 'All') .. '\t\t\t\t(tfm.exec.chatMessage)')
+  print(label('[Room: Chat message]') .. '\ttarget: ' .. (playerName or 'All') .. '\t\t\t\t' .. func('(tfm.exec.chatMessage)'))
   print(message)
 end
 
@@ -275,7 +274,7 @@ function tfm.exec.killPlayer(playerName)
   if (tfm.get.room.playerList[playerName]) then
     tfm.get.room.playerList[playerName].isDead = true
   end
-  print(label('[Game: Kill]') .. '\t\tplayer: ' .. playerName .. ' | success: ' .. tostring(not not tfm.get.room.playerList[playerName]) .. '\t\t(tfm.exec.killPlayer)')
+  print(label('[Game: Kill]') .. '\t\tplayer: ' .. playerName .. ' | success: ' .. tostring(not not tfm.get.room.playerList[playerName]) .. '\t\t' .. func('(tfm.exec.killPlayer)'))
 end
 
 function tfm.exec.linkMice(playerName1, playerName2, linked)
@@ -349,11 +348,11 @@ end
 function tfm.exec.setRoomMaxPlayers(maxPlayers)
   assert(type(maxPlayers) == 'number', 'Expected type of number for maxPlayers, instead got ' .. type(maxPlayers))
   tfm.get.room.maxPlayers = maxPlayers
-  print(label('[Room: Max players]') .. '\tmaxPlayers: ' .. maxPlayers .. '\t\t\t\t(tfm.exec.setRoomMaxPlayers)')
+  print(label('[Room: Max players]') .. '\tmaxPlayers: ' .. maxPlayers .. '\t\t\t\t' .. func('(tfm.exec.setRoomMaxPlayers)'))
 end
 
 function tfm.exec.setRoomPassword(password)
-  print(label('[Room: ' .. (password == '' and 'Unset' or 'Set') .. ' password]') .. '\tpassword: ' .. password .. '\t\t\t\t(tfm.exec.setRoomPassword)')
+  print(label('[Room: ' .. (password == '' and 'Unset' or 'Set') .. ' password]') .. '\tpassword: ' .. password .. '\t\t\t\t' .. func('(tfm.exec.setRoomPassword)'))
   tfm.get.room.passwordProtected = password ~= ''
 end
 
@@ -372,7 +371,7 @@ end
 function tfm.exec.snow(duration, snowBallPower)
   assert(type(duration) == 'number' or duration == nil, "Expected type of number or nil for duration, instead got " .. type(duration))
   assert(type(snowBallPower) == 'number' or snowBallPower == nil, "Expected type of number or nil for snowBallPower, instead got " .. type(snowBallPower))
-  print(label('[Room: Snowing]') .. '\t\tduration: ' .. (duration or 60) .. 's | Snow Power: ' .. (snowBallPower or 10) .. '\t\t(tfm.exec.snow)')
+  print(label('[Room: Snowing]') .. '\t\tduration: ' .. (duration or 60) .. 's | Snow Power: ' .. (snowBallPower or 10) .. '\t\t' .. func('(tfm.exec.snow)'))
 end
 
 return tfm

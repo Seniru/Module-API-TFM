@@ -187,7 +187,12 @@ function tfm.exec.addShamanObject(objectType, xPosition, yPosition, angle, xSpee
 end
 
 function tfm.exec.changePlayerSize(playerName, size)
-  error('Not implemented')
+    size = size or 1
+    assert(type(playerName) == 'string', 'Expected type of string for playerName, instead got ' .. type(playerName))
+    assert(type(size) == 'number', 'Expected type of nil or number for size, instead got ' .. type(size))
+    assert(size >= 0.1 and size <= 5, 'Expected value between 0.1 to 5 for size, instead got ' .. size)
+    print(label('[Player: Change size]') .. '\tplayer: ' .. playerName .. ' | size: ' .. (size or 1) .. '\t\t' .. func('(tfm.exec.changePlayerSize)'))
+    tfm.get.room.playerList[playerName].size = size or 1
 end
 
 function tfm.exec.chatMessage(message, playerName)
@@ -274,7 +279,7 @@ function tfm.exec.killPlayer(playerName)
   if (tfm.get.room.playerList[playerName]) then
     tfm.get.room.playerList[playerName].isDead = true
   end
-  print(label('[Game: Kill]') .. '\t\tplayer: ' .. playerName .. ' | success: ' .. tostring(not not tfm.get.room.playerList[playerName]) .. '\t\t' .. func('(tfm.exec.killPlayer)'))
+  print(label('[Player: Kill]') .. '\t\tplayer: ' .. playerName .. ' | success: ' .. tostring(not not tfm.get.room.playerList[playerName]) .. '\t\t' .. func('(tfm.exec.killPlayer)'))
 end
 
 function tfm.exec.linkMice(playerName1, playerName2, linked)
@@ -325,7 +330,7 @@ function tfm.exec.removePhysicalObject(id)
   error('Not implemented')
 end
 
-function tfm.exec.respawnPlayer(playrName)
+function tfm.exec.respawnPlayer(playerName)
   error('Not implemented')
 end
 
@@ -365,7 +370,11 @@ function tfm.exec.setShamanMode(playerName, mode)
 end
 
 function tfm.exec.setVampirePlayer(playerName, makeAVampire)
-  error('Not implemented')
+    makeAVampire = makeAVampire == nil and true or makeAVampire
+    assert(type(playerName) == 'string', 'Expected type of string for playerName, instead got ' .. type(playerName))
+    assert(type(makeAVampire) == 'boolean', 'Expected type of boolean or nil for makeAVampire, instrad got ' .. type(makeAVampire))
+    print(label('[Player: Vampire]') .. '\tplayer: ' .. playerName .. ' | status: ' .. tostring(makeAVampire) .. '\t\t' .. func('(tfm.exec.setVampirePlayer)'))    
+    tfm.get.room.playerList[playerName].isVampire = makeAVampire
 end
 
 function tfm.exec.snow(duration, snowBallPower)

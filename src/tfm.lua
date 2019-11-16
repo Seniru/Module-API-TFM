@@ -150,7 +150,22 @@ local tfm = {
       name = '',
       objectList = {},
       passwordProtected = false,
-      playerList = {}
+      playerList = {},
+      
+      --[[WARNING!!!: Fields below are not related with tfm's module API]]--
+      enabledAfkDeath = true,
+      enabledAllShamanSkills = true,
+      enabledAutoNewGame = true,
+      enabledAutoScore = true,
+      enabledAutoShaman = true,
+      enabledAutoTimeLeft = true,
+      enabledDebugCommand = true,
+      allowedMinimalistMode = true,
+      allowedMortCommand = true,
+      enabledPhysicalConsumables = true,
+      enabledPrespawnPreview = true,
+      allowedWatchCommand = true
+      
     },
     --[[WARNING!!!: data field is not related with tfm's module API]]--
     data = {
@@ -269,11 +284,19 @@ function tfm.exec.giveConsumables(playerName, consumableId, amount)
 end
 
 function tfm.exec.giveMeep(playerName, canMeep)
-  error('Not implemented')
+    canMeep = canMeep == nil and true or canMeep
+    assert(type(playerName) == 'string', 'Expected type of string for playerName, instead got ' .. type(playerName))
+    assert(type(canMeep) == 'boolean', 'Expected type of boolean or nil for canMeep, instead got ' .. type(canMeep))
+    print(label('[Player: ' .. (canMeep and '(+)' or '(-)') ..' Meep]') .. '\tplayer: ' .. playerName .. ' | canMeep: ' .. tostring(canMeep) .. '\t\t' .. func('(tfm.exec.giveMeep)'))
+    tfm.get.room.playerList[playerName].canMeep = canMeep
 end
 
 function tfm.exec.giveTransformations(playerName, canTransform)
-  error('Not implemented')
+    canTransform = canTransform == nil and true or canTransform
+    assert(type(playerName) == 'string', 'Expected type of string for playerName, instead got ' .. type(playerName))
+    assert(type(canTransform) == 'boolean', 'Expected type of boolean or nil for canTransform, instead got ' .. type(canTransform))
+    print(label('[Player: ' .. (canTransform and '(+)' or '(-)') ..' Transform]') .. '\tplayer: ' .. playerName .. ' | canTransform: ' .. tostring(canTransform) .. '\t' .. func('(tfm.exec.giveTransformations)'))
+    tfm.get.room.playerList[playerName].canTransform = canTransform
 end
 
 function tfm.exec.killPlayer(playerName)
@@ -310,11 +333,24 @@ function tfm.exec.playEmote(playerName, emoteId, emoteArg)
 end
 
 function tfm.exec.playerVictory(playerName)
-  error('Not implemented')
+  local gave = false
+  assert(type(playerName) == 'string', 'Expected type of string for playerName, instead got ' .. type(playerName))
+  if tfm.get.room.playerList[playerName].hasCheese then
+      tfm.get.room.playerList[playerName].hasCheese = false
+      if tfm.get.room.enabledAutoScore then
+          tfm.get.room.playerList[playerName].score = tfm.get.room.playerList[playerName].score + 10
+      end
+      gave = true
+      --TODO: Implement timeLeft and other relevant fields for using the function
+      eventPlayerWon(playerName)
+  end
+  print(label('[Player: Win]') .. '\t\tplayer: ' .. playerName .. ' | success: ' .. tostring(gave) .. '\t\t' .. func('(tfm.exec.playerVictory)'))
 end
 
 function tfm.exec.removeCheese(playerName)
-  error('Not implemented')
+  assert(type(playerName) == 'string', 'Expected type of string for playerName, instead got ' .. type(playerName))
+  tfm.get.room.playerList[playerName].hasCheese = false
+  print(label('[Player: (-) Cheese]') .. '\tplayer: ' .. playerName .. '\t\t\t\t' .. func('(tfm.exec.removeCheese)'))
 end
 
 function tfm.exec.removeImage(imageId)

@@ -1,6 +1,8 @@
 local Object = require 'src.Object'
 local escapes = require 'src.escapes'
 
+require 'src.events'
+
 local tfm = {
   enum = {
     emote = {
@@ -280,6 +282,7 @@ function tfm.exec.killPlayer(playerName)
     tfm.get.room.playerList[playerName].isDead = true
   end
   print(label('[Player: Kill]') .. '\t\tplayer: ' .. playerName .. ' | success: ' .. tostring(not not tfm.get.room.playerList[playerName]) .. '\t\t' .. func('(tfm.exec.killPlayer)'))
+  eventPlayerDied(playerName)
 end
 
 function tfm.exec.linkMice(playerName1, playerName2, linked)
@@ -375,6 +378,7 @@ function tfm.exec.setVampirePlayer(playerName, makeAVampire)
     assert(type(makeAVampire) == 'boolean', 'Expected type of boolean or nil for makeAVampire, instrad got ' .. type(makeAVampire))
     print(label('[Player: Vampire]') .. '\tplayer: ' .. playerName .. ' | status: ' .. tostring(makeAVampire) .. '\t\t' .. func('(tfm.exec.setVampirePlayer)'))    
     tfm.get.room.playerList[playerName].isVampire = makeAVampire
+    eventPlayerVampire(playerName)
 end
 
 function tfm.exec.snow(duration, snowBallPower)

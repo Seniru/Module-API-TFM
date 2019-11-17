@@ -19,7 +19,8 @@ function test:before()
 end
 
 function test:escapes()
-
+    assertEqual(label('[LABEL]'), '\27[1m\27[93;40m[LABEL]\27[0m')
+    assertEqual(func('(FUNC)'), '\27[3m\27[2m(FUNC)\27[0m')
 end
 
 function test:events()

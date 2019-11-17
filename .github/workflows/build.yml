@@ -15,7 +15,7 @@ jobs:
         run: |
           cd LuaDist/bin
           git submodule add -f https://github.com/Phrogz/Lunity.git    
-          lua -lluacov test.lua
-          luacov
+          ./lua -lluacov test.lua
+          ./luacov
           cd ..; cd ..
           bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}

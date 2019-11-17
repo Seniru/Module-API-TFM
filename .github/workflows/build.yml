@@ -13,5 +13,6 @@ jobs:
                   
       - name: Run coverage and upload to codecov
         run: |
-          lua -lluacov main.test.lua
+          LuaDist/bin/lua -lluacov main.test.lua
+          LuaDist/bin/luacov
           bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}

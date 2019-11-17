@@ -1,0 +1,21 @@
+name: Build
+
+on: [push]
+
+jobs:
+  install:  
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install required dependencies
+        run: |
+          . install.sh
+        
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run coverage and upload to codecov
+        run: |
+          lua -lluacov main.test.lua
+          bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}
+          
+    

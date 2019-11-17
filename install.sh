@@ -2,7 +2,7 @@
 
 #pre-installation
 echo "$(curl -fksSL https://tinyurl.com/luadist)" | bash
-git submodule add https://github.com/Phrogz/Lunity.git
+#git submodule add https://github.com/Phrogz/Lunity.git
 
 alias lua='LuaDist/bin/lua'
 alias luadist='LuaDist/bin/luadist'

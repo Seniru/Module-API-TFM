@@ -6,6 +6,7 @@ jobs:
   install:  
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v1
       - name: Install required dependencies
         run: |
           . install.sh

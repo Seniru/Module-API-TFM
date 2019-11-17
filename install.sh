@@ -5,7 +5,7 @@ alias luadist='LuaDist/bin/luadist'
 
 #install required libraries
 luadist install busted
-luadist install luacov
+#luadist install luacov
 
-alias busted='LuaDist/bin/busted'
+#alias busted='LuaDist/bin/busted'
 alias luacov='LuaDist/bin/luacov'

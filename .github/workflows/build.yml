@@ -1,9 +1,7 @@
 name: Build
 
-on: 
-  push:
-    paths: ["!**.md"] 
-    
+on: [push]
+
 jobs:
   build:  
     runs-on: ubuntu-latest
@@ -18,4 +16,3 @@ jobs:
           LuaDist/bin/lua -lluacov test.lua
           LuaDist/bin/luacov
           bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}
-

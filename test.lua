@@ -1,4 +1,4 @@
-_ENV = require('Lunity.lunity')()
+_ENV = require('lunity')()
 require 'src.escapes'
 require 'src.events'
 

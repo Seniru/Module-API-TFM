@@ -8,7 +8,7 @@ local Player = {}
 Player.__index = Player;
 
 function Player.new(name, config)
-  config = setmetatable(config, Config)
+  config = setmetatable(config or {}, Config)
   local self = setmetatable({}, Player)
 
   self.playerName = name
@@ -18,13 +18,14 @@ function Player.new(name, config)
   self.id = config.id or 0
   self.inHardMode = config.inHardMode or 0
   self.isDead = config.isDead or false
-  self.isFacingRight = not not config.isFacingRight
+  self.isFacingRight = config.isFacingRight == nil and true or config.isFacingRight
   self.isInvoking = not not config.isInvoking
   self.isJumping = false
   self.isShaman = not not config.isShaman
   self.isVampire = false
   self.look = 'NOT IMPLEMENTED'
   self.movingLeft = not not config.movingLeft
+  self.movingRight = not not config.movingRight
   self.registrationData = config.registrationData or 0
   self.score = 0
   self.shamanMode = config.shamanMode or 0

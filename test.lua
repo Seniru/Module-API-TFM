@@ -8,12 +8,11 @@ local Player = require 'src.Player'
 
 function test:before()
     --insert players to the game
-    local players = {
+    for name, player in next, {
        souris0 = Player.new('souris0', {}),
        souris1 = Player.new('souris1', {}),
        souris2 = Player.new('souris2', {})
-    }
-    for name, player in next, players do
+    } do
         tfm.get.room.playerList[name] = player
     end
 end
@@ -31,7 +30,82 @@ function test:escapes()
 end
 
 function test:Player()
-    
+    assertType(Player.new('King_seniru#5890', {}), 'table') -- Should be able to create an return a new Player table
+    assertType(Player.new('King_seniru#5890'), 'table') --Should be able to create an return a new Player table without config
+    -- Testing players without configurations
+    local p = Player.new('souris')
+    assertEqual(p.playerName, 'souris')
+    assertEqual(p.community, 'en')
+    assertEqual(p.gender, 0)
+    assertEqual(p.hasCheese, false)
+    assertEqual(p.id, 0)
+    assertEqual(p.inHardMode, 0)
+    assertEqual(p.isDead, false)
+    assertEqual(p.isFacingRight, true)
+    assertEqual(p.isInvoking, false)
+    assertEqual(p.isJumping, false)
+    assertEqual(p.isShaman, false)
+    assertEqual(p.isVampire, false)
+    assertEqual(p.look, 'NOT IMPLEMENTED')
+    assertEqual(p.movingLeft, false)
+    assertEqual(p.movingRight, false)
+    assertEqual(p.registrationData, 0)
+    assertEqual(p.score, 0)
+    assertEqual(p.shamanMode, 0)
+    assertEqual(p.spouseId, 1)
+    assertEqual(p.spouseName, nil)
+    assertEqual(p.title, 'Little Mouse')
+    assertEqual(p.tribeId, 0)
+    assertEqual(p.tribeName, '')
+    assertEqual(p.vx, 0)
+    assertEqual(p.vy, 0)
+    assertEqual(p.x, 0)
+    assertEqual(p.y, 0)
+    --Testing players with configurations (configurations are only tested this time)
+    local p2 = Player.new('souris10', {
+        community='br',
+        hasCheese=true,
+        id=100,
+        inHardMode=true,
+        isDead=true,
+        isFacingRight=true,
+        isInvoking=false,
+        isShaman=true,
+        movingLeft=true,
+        movingRight=false,
+        registrationData=20191010,
+        shamanMode='hard',
+        spouseId=900,
+        spouseName='tig',
+        title='noob',
+        tribeId=900,
+        tribeName='We talk a lot',
+        vx=100,
+        vy=100,
+        x=100,
+        y=100}
+    )
+    assertEqual(p2.community, 'br')
+    assertEqual(p2.hasCheese, true)
+    assertEqual(p2.id, 100)
+    assertEqual(p2.inHardMode, true)
+    assertEqual(p2.isDead, true)
+    assertEqual(p2.isFacingRight, true)
+    assertEqual(p2.isInvoking, false)
+    assertEqual(p2.isShaman, true)
+    assertEqual(p2.movingLeft, true)
+    assertEqual(p2.movingRight, false)
+    assertEqual(p2.registrationData, 20191010)
+    assertEqual(p2.shamanMode, 'hard')
+    assertEqual(p2.spouseId, 900)
+    assertEqual(p2.spouseName, 'tig')
+    assertEqual(p2.title, 'noob')
+    assertEqual(p2.tribeId, 900)
+    assertEqual(p2.tribeName, 'We talk a lot')
+    assertEqual(p2.vx, 100)
+    assertEqual(p2.vy, 100)
+    assertEqual(p2.x, 100)
+    assertEqual(p2.y, 100)
 end
 
 function test:Object()

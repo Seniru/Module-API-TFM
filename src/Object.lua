@@ -4,6 +4,7 @@ local Object = {}
 Object.__index = Object
 
 function Object.new(id, x, y, config)
+  assert(type(config), 'table', 'Expected a table for config, instead got ' .. type(config))
   config = setmetatable(config, Config)
   local self = setmetatable({}, Object)
 
@@ -17,6 +18,8 @@ function Object.new(id, x, y, config)
   self.vy = config.vy or 0
   self.x = x or 0
   self.y = y or 0
+  self.width = config.width or 0
+  self.height = config.height or 0
   self.bodyDef = config
 
   return self

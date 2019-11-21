@@ -109,7 +109,31 @@ function test:Player()
 end
 
 function test:Object()
-    
+    assertType(Object.new(0, 0, 0, {type=0}), 'table') -- testing objects created with configuration
+    assertErrors(Object.new, 0, 0, 0) -- should raise an error when created objects without configurations
+    --general testing
+    local obj = Object.new(1, 100, 100, {
+        type=0,
+        angle=90,
+        baseType=2,
+        width=100,
+        ghost=true,
+        x=20,
+        y=20
+    })
+    assertEqual(obj.id, 1)
+    assertEqual(obj.type, 0)
+    assertEqual(obj.angle, 90)
+    assertEqual(obj.baseType, 2)
+    assertTableEquals(obj.colors, {})
+    assertEqual(obj.ghost, true)
+    assertEqual(obj.vx, 0)
+    assertEqual(obj.vy, 0)
+    assertEqual(obj.x, 100)
+    assertEqual(obj.y, 100)
+    assertEqual(obj.width, 100)
+    assertEqual(obj.height, 0)
+    assertType(obj.bodyDef, 'table')
 end
 
 function test:tfm()

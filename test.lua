@@ -5,6 +5,7 @@ require 'src.events'
 local tfm = require 'src.tfm'
 local Object = require 'src.Object'
 local Player = require 'src.Player'
+local Conjuration = require 'src.Conjuration'
 
 function test:before()
     --insert players to the game
@@ -134,6 +135,23 @@ function test:Object()
     assertEqual(obj.width, 100)
     assertEqual(obj.height, 0)
     assertType(obj.bodyDef, 'table')
+end
+
+function test:Conjuration()
+
+    local c1 = Conjuration.new(100, 200, 1000)
+    local c2 = Conjuration.new(200, 300)
+
+    assertType(c1, 'table') -- Should create a Conjuration table when called new method
+    assertType(c2, 'table') -- Should create a Conjuration table with default duration when duration is nil
+    -- Should return correct
+    assertEqual(c1.xPosition, 100)
+    assertEqual(c1.yPosition, 200)
+    assertEqual(c2.xPosition, 200)
+    assertEqual(c2.yPosition, 300)
+    -- Should return the correct duration
+    assertEqual(c1.duration, 1000)
+    assertEqual(c2.duration, 10000)
 end
 
 function test:tfm()

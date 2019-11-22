@@ -175,10 +175,9 @@ local tfm = {
 }
 
 function tfm.exec.addConjuration(xPosition, yPosition, duration)
-  assert(type(xPosition) == 'number', 'Expected type of number for xPosition, instead got ' .. type(xPosition))
-  assert(type(yPosition) == 'number', 'Expected type of number for yPosition, instead got ' .. type(yPosition))
-  assert(type(duration) == 'number' or duration == nil, 'Expected type of number or nil for duration, instead got ' .. type(duration))
-  print(label('[Map: Conjuration]') .. '\tX: ' .. xPosition .. ' | Y: ' .. yPosition .. ' | duration: ' .. (duration or 10000) .. 's \t' .. func('(tfm.exec.addConjuration)'))
+  local conj = Conjuration.new(xPosition, yPosition, duration)
+  print(label('[Map: Conjuration]') .. '\tX: ' .. conj.xPosition .. ' | Y: ' .. conj.yPosition .. ' | duration: ' .. conj.duration .. 's \t' .. func('(tfm.exec.addConjuration)'))
+  return conj
 end
 
 function tfm.exec.addImage(imageId, target, xPosition, yPosition, targetPlayer)

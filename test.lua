@@ -112,6 +112,8 @@ end
 function test:Object()
     assertType(Object.new(0, 0, 0, {type=0}), 'table') -- testing objects created with configuration
     assertErrors(Object.new, 0, 0, 0) -- should raise an error when created objects without configurations
+    assertErrors(Object.new, 0, nil, 0, {})
+    assertErrors(Object.new, 0, 0, nil, {})
     --general testing
     local obj = Object.new(1, 100, 100, {
         type=0,
@@ -155,7 +157,32 @@ function test:Conjuration()
 end
 
 function test:tfm()
-    
+
+    -- addConjuration
+    assertTableEquals(tfm.exec.addConjuration(200, 200, 100), Conjuration.new(200, 200, 100))
+    assertTableEquals(tfm.exec.addConjuration(200, 200), Conjuration.new(200, 200))
+
+    assertErrors(tfm.exec.addImage) --addImage
+    assertErrors(tfm.exec.addJoint) --addJoint
+
+    --addPhysicObject
+    local obj = tfm.exec.addPhysicObject(0, 100, 100, {type=0, width=100, height=100})
+    assertTableEquals(obj, Object.new(0, 100, 100, {type=0, width=100, height=100}))
+    assertTableEquals(tfm.get.room.objectList[0], obj)
+
+    assertErrors(tfm.exec.addShamanObject) --addShamanObject
+
+    --changePlayerSize
+    assertErrors(tfm.exec.changePlayerSize, 0, 0)
+    assertErrors(tfm.exec.changePlayerSize, 'seniru', 2)
+    assertErrors(tfm.exec.changePlayerSize, 'seniru', 0)
+    assertErrors(tfm.exec.changePlayerSize, 'seniru', 6)
+    tfm.exec.changePlayerSize('souris0', 3) -- changing size to 3
+    assertEqual(tfm.get.room.playerList['souris0'].size, 3)
+    tfm.exec.changePlayerSize('souris0', 1) -- changing size to default (1)
+    assertEqual(tfm.get.room.playerList['souris0'].size, 1)
+
+
 end
 
 function test:events()

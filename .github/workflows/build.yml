@@ -3,14 +3,14 @@ name: Build
 on: [push]
 
 jobs:
-  build:  
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
       - name: Install required dependencies
         run: |
           . install.sh
-                  
+
       - name: Run coverage and upload to codecov
         run: |
           LuaDist/bin/lua -lluacov test.lua

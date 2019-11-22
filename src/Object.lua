@@ -4,9 +4,13 @@ local Object = {}
 Object.__index = Object
 
 function Object.new(id, x, y, config)
-  assert(type(config), 'table', 'Expected a table for config, instead got ' .. type(config))
-  config = setmetatable(config, Config)
-  local self = setmetatable({}, Object)
+    config = setmetatable(config, Config)
+    local self = setmetatable({}, Object)
+    
+    assert(type(x) == 'number', 'Expected type of number for x, instead got ' .. type(xPosition))
+    assert(type(y) == 'number', 'Expected type of number for y, instead got ' .. type(yPosition))
+    assert(type(config), 'table', 'Expected a table for config, instead got ' .. type(config))
+  
 
   self.id = id
   self.type = config.type

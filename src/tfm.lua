@@ -1,5 +1,6 @@
 local Object = require 'src.Object'
 local escapes = require 'src.escapes'
+local Conjuration = require 'src.Conjuration'
 
 require 'src.events'
 
@@ -189,13 +190,9 @@ function tfm.exec.addJoint(id, ground1, ground2, jointDef)
 end
 
 function tfm.exec.addPhysicObject(id, xPosition, yPosition, bodyDef)
-
-  assert(type(xPosition) == 'number', 'Expected type of number for xPosition, instead got ' .. type(xPosition))
-  assert(type(yPosition) == 'number', 'Expected type of number for yPosition, instead got ' .. type(yPosition))
-  assert(type(bodyDef) == 'table', 'Expected type of table for bodyDef, instead got ' .. type(bodyDef))
-
   tfm.get.room.objectList[id] = Object.new(id, xPosition, yPosition, bodyDef)
   print(label('[Map: (+)Phy Obj]') .. '\tID: ' .. id .. ' | X: ' .. xPosition .. ' | Y: ' .. yPosition .. ' ...\t\t' .. func('(tfm.exec.addPhysicObject)'))
+  return tfm.get.room.objectList[id]
 end
 
 function tfm.exec.addShamanObject(objectType, xPosition, yPosition, angle, xSpeed, ySpeed, ghost)

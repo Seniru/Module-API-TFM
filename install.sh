@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #pre-installation
-echo "$(curl -fksSL https://tinyurl.com/luadist)" | bash
+curl -fksSL https://tinyurl.com/luadist | bash
 
 alias lua='LuaDist/bin/lua'
 alias luadist='LuaDist/bin/luadist'

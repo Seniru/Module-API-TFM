@@ -209,8 +209,9 @@ function tfm.exec.changePlayerSize(playerName, size)
 end
 
 function tfm.exec.chatMessage(message, playerName)
-  assert(type(playerName) == 'string' or playerName == nil, 'Expected type of string or nil for playerName, instead got ' .. type(playerName))
-  table.insert(tfm.get.data, {message, playerName})
+  assert(type(message) == 'string', 'Expected type of string for message, instead got type of ' .. type(message))
+  assert(playerName == nil or type(playerName) == 'string', 'Expected type of string or nil for playerName, instead got ' .. type(playerName))
+  table.insert(tfm.get.data, {message, playerName or 'All'})
   print(label('[Room: Chat message]') .. '\ttarget: ' .. (playerName or 'All') .. '\t\t\t\t' .. func('(tfm.exec.chatMessage)'))
   print(message)
 end

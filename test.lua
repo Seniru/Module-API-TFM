@@ -182,6 +182,127 @@ function test:tfm()
     tfm.exec.changePlayerSize('souris0', 1) -- changing size to default (1)
     assertEqual(tfm.get.room.playerList['souris0'].size, 1)
 
+    --chatMessage
+    assertErrors(tfm.exec.chatMessage, 1, 'souris1') -- Sending malformed messages
+    assertErrors(tfm.exec.chatMessage, 'Hello world', 3) -- Sending to bad recipients 
+    tfm.exec.chatMessage('Testing', 'souris1') -- Sending message only to souris1
+    assertTableEquals(tfm.get.data[#tfm.get.data], {'Testing', 'souris1'})
+    tfm.exec.chatMessage('Testing ..') -- Sending message to everybody
+    assertTableEquals(tfm.get.data[#tfm.get.data], {'Testing ..', 'All'})
+
+    assertErrors(tfm.exec.disableAfkDeath)
+    assertErrors(tfm.exec.disableAllShamanSkills)
+    assertErrors(tfm.exec.disableAutoNewGame)
+    assertErrors(tfm.exec.disableAutoScore)
+    assertErrors(tfm.exec.disableAutoShaman)
+    assertErrors(tfm.exec.disableAutoTimeLeft)
+    assertErrors(tfm.exec.disableDebugCommand)
+    assertErrors(tfm.exec.disableMinimalistMode)
+    assertErrors(tfm.exec.disableMortCommand)
+    assertErrors(tfm.exec.disablePhysicalConsumables)
+    assertErrors(tfm.exec.disablePrespawnPreview)
+    assertErrors(tfm.exec.disableWatchCommand)
+    assertErrors(tfm.exec.displayParticle)
+    assertErrors(tfm.exec.explosion)
+    assertErrors(tfm.exec.giveCheese)
+    assertErrors(tfm.exec.giveConsumables)
+    
+    --giveMeep
+    assertErrors(tfm.exec.giveMeep, nil, true) -- Should throw errors for non-string playerNames
+    assertErrors(tfm.exec.giveMeep, 'true') -- Should throw errors for non nil or boolean values
+    tfm.exec.giveMeep('souris2', true)
+    assertEqual(tfm.get.room.playerList['souris2'].canMeep, true)
+    tfm.exec.giveMeep('souris0')
+    assertEqual(tfm.get.room.playerList['souris0'].canMeep, true)
+    tfm.exec.giveMeep('souris0', false)
+    assertEqual(tfm.get.room.playerList['souris0'].canMeep, false)
+
+    --giveTransformations
+    assertErrors(tfm.exec.giveTransformations, nil, true) -- Should throw errors for non-string playerNames
+    assertErrors(tfm.exec.giveTransformations, 'true') -- Should throw errors for non nil or boolean values
+    tfm.exec.giveTransformations('souris2', true)
+    assertEqual(tfm.get.room.playerList['souris2'].canTransform, true)
+    tfm.exec.giveTransformations('souris0')
+    assertEqual(tfm.get.room.playerList['souris0'].canTransform, true)
+    tfm.exec.giveTransformations('souris0', false)
+    assertEqual(tfm.get.room.playerList['souris0'].canTransform, false)
+
+    --killPlayer
+    assertErrors(tfm.exec.killPlayer) -- Should throw an error for non-string names
+    tfm.exec.killPlayer('souris1') -- Should kill a player
+    assertEqual(tfm.get.room.playerList['souris1'].isDead, true)
+    assertDoesNotError(tfm.exec.killPlayer, 'tig') -- Shouldn't throw errors for non-existing players
+    
+    assertErrors(tfm.exec.linkMice)
+    assertErrors(tfm.exec.lowerSyncDelay)
+    assertErrors(tfm.exec.moveObject)
+    assertErrors(tfm.exec.movePlayer)
+    assertErrors(tfm.exec.newGame)
+    assertErrors(tfm.exec.playEmote)
+
+    --playerVictory
+    assertErrors(tfm.exec.playerVictory, nil) -- Should throw errors for non-string names
+    tfm.get.room.enabledAutoScore = true
+    -- Should win if player has cheese
+    tfm.get.room.playerList['souris1'].hasCheese = true
+    tfm.exec.playerVictory('souris1')
+    assertEqual(tfm.get.room.playerList['souris1'].hasCheese, false)
+    assertEqual(tfm.get.room.playerList['souris1'].score, 10)
+    -- Should not win if player doesn't has cheese
+    tfm.get.room.playerList['souris1'].hasCheese = false
+    tfm.exec.playerVictory('souris1')
+    assertEqual(tfm.get.room.playerList['souris1'].hasCheese, false)
+    assertEqual(tfm.get.room.playerList['souris1'].score, 10)
+    -- Should not add marks if auto score is disabled
+    tfm.get.room.enabledAutoScore = false
+    tfm.get.room.playerList['souris0'].hasCheese = true
+    tfm.exec.playerVictory('souris0')
+    assertEqual(tfm.get.room.playerList['souris0'].score, 0)
+
+    --removeCheese
+    assertErrors(tfm.exec.removeCheese, nil) -- Should throw errors for non-string names
+    tfm.get.room.playerList['souris2'].hasCheese = true
+    tfm.exec.removeCheese('souris2')
+    assertEqual(tfm.get.room.playerList['souris2'].hasCheese, false)
+
+    assertErrors(tfm.exec.removeImage)
+    assertErrors(tfm.exec.removeJoint)
+    assertErrors(tfm.exec.removeObject)
+    assertErrors(tfm.exec.removePhysicalObject)
+    assertErrors(tfm.exec.respawnPlayer)
+    assertErrors(tfm.exec.setAutoMapFlipMode)
+    assertErrors(tfm.exec.setGameTime)
+    assertErrors(tfm.exec.setNameColor)
+    assertErrors(tfm.exec.setPlayerScore)
+
+    --setRoomMaxPlayers
+    assertErrors(tfm.exec.setRoomMaxPlayers, 'five') -- Should throw an error for non number values
+    tfm.exec.setRoomMaxPlayers(5)
+    assertEqual(tfm.get.room.maxPlayers, 5)
+
+    --setRoomPassword
+    tfm.exec.setRoomPassword('p455w0rd') -- Should set a password when a string is specified
+    assertEqual(tfm.get.room.passwordProtected, true)
+    tfm.exec.setRoomPassword('') -- Should unset the password, when password is blank
+    assertEqual(tfm.get.room.passwordProtected, false)
+
+    assertErrors(tfm.exec.setShaman)
+    assertErrors(tfm.exec.setShamanMode)
+
+    --setVampirePlayer
+    assertErrors(tfm.exec.setVampirePlayer, 100, true) -- Should throw error for non string characters for name
+    assertErrors(tfm.exec.setVampirePlayer, 'souris0', 'make a vamp') -- Should throw error for non boolean values for makeAVamp
+    tfm.exec.setVampirePlayer('souris1', true)
+    assertEqual(tfm.get.room.playerList['souris1'].isVampire, true)
+    tfm.exec.setVampirePlayer('souris1', false)
+    assertEqual(tfm.get.room.playerList['souris1'].isVampire, false)
+    tfm.exec.setVampirePlayer('souris1')
+    assertEqual(tfm.get.room.playerList['souris1'].isVampire, true)
+
+    --setSnow
+    assertErrors(tfm.exec.snow, 'forever', 100) -- Should throw error for non nil or number values
+    assertErrors(tfm.exec.snow, 2000, 'powerful') -- Should throw error for non nil or number values
+
 
 end
 

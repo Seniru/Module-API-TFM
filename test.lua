@@ -110,33 +110,24 @@ function test:Player()
 end
 
 function test:Object()
-    assertType(Object.new(0, 0, 0, {type=0}), 'table') -- testing objects created with configuration
-    assertErrors(Object.new, 0, 0, 0) -- should raise an error when created objects without configurations
-    assertErrors(Object.new, 0, nil, 0, {})
-    assertErrors(Object.new, 0, 0, nil, {})
-    --general testing
-    local obj = Object.new(1, 100, 100, {
-        type=0,
-        angle=90,
-        baseType=2,
-        width=100,
-        ghost=true,
-        x=20,
-        y=20
-    })
-    assertEqual(obj.id, 1)
-    assertEqual(obj.type, 0)
-    assertEqual(obj.angle, 90)
-    assertEqual(obj.baseType, 2)
-    assertTableEquals(obj.colors, {})
-    assertEqual(obj.ghost, true)
-    assertEqual(obj.vx, 0)
-    assertEqual(obj.vy, 0)
-    assertEqual(obj.x, 100)
-    assertEqual(obj.y, 100)
-    assertEqual(obj.width, 100)
-    assertEqual(obj.height, 0)
-    assertType(obj.bodyDef, 'table')
+    assertType(Object(0, 0, 0, 0, 0, 0, false), 'table') -- testing objects created with configuration
+    -- general testing
+    local obj1 = Object(1, 20, 40, 45, 2, 4, true, {0xFF0000, 0X000000})
+    local obj2 = Object(5, 30, 50, 90, 1, 2, false)
+
+    assertEqual(obj1.angle, 45)
+    assertEqual(obj1.baseType, 1)
+    assertTableEquals(obj1.colors, {0xFF0000, 0x000000})
+    assertTableEquals(obj2.colors, {})
+    assertEqual(obj1.ghost, true)
+    assertEqual(obj1.id, 2)
+    assertEqual(obj2.id, 3)
+    assertEqual(obj1.type, 1)
+    assertEqual(obj1.vx, 2)
+    assertEqual(obj1.vy, 4)
+    assertEqual(obj1.x, 20)
+    assertEqual(obj1.y, 40)
+    
 end
 
 function test:Conjuration()
@@ -164,13 +155,32 @@ function test:tfm()
 
     assertErrors(tfm.exec.addImage) --addImage
     assertErrors(tfm.exec.addJoint) --addJoint
+    assertErrors(tfm.exec.addPhysicObject) --addPhysicObject
 
-    --addPhysicObject
-    local obj = tfm.exec.addPhysicObject(0, 100, 100, {type=0, width=100, height=100})
-    assertTableEquals(obj, Object.new(0, 100, 100, {type=0, width=100, height=100}))
-    assertTableEquals(tfm.get.room.objectList[0], obj)
-
-    assertErrors(tfm.exec.addShamanObject) --addShamanObject
+    --addShamanObject
+    assertErrors(tfm.exec.addShamanObject) -- Should throw an error when called without args
+    
+    local obj1 = tfm.exec.addShamanObject(1, 2, 4, 45, 50, 60, true)
+    local obj2 = tfm.exec.addShamanObject(2, 4, 5, 100, 200, 90, true)
+    
+    assertType(obj1, 'number')
+    assertNotEqual(obj1, obj2)
+    assertType(tfm.get.room.objectList[obj1], 'table')
+    
+    local objP1 = tfm.get.room.objectList[obj1]
+    local objP2 = tfm.get.room.objectList[obj2]
+    
+    assertEqual(objP1.angle, 45)
+    assertEqual(objP2.baseType, 2)
+    assertTableEquals(objP1.colors, {})
+    assertEqual(objP2.ghost,  true)
+    assertEqual(objP1.id, obj1)
+    assertEqual(objP2.id, obj2)
+    assertEqual(objP1.type, 1)
+    assertEqual(objP2.vx, 200)
+    assertEqual(objP1.vy, 60)
+    --assertEqual(objP2.x, 2)
+    assertEqual(objP1.y, 4)
 
     --changePlayerSize
     assertErrors(tfm.exec.changePlayerSize, 0, 0)

@@ -190,13 +190,14 @@ function tfm.exec.addJoint(id, ground1, ground2, jointDef)
 end
 
 function tfm.exec.addPhysicObject(id, xPosition, yPosition, bodyDef)
-  tfm.get.room.objectList[id] = Object.new(id, xPosition, yPosition, bodyDef)
-  print(label('[Map: (+)Phy Obj]') .. '\tID: ' .. id .. ' | X: ' .. xPosition .. ' | Y: ' .. yPosition .. ' ...\t\t' .. func('(tfm.exec.addPhysicObject)'))
-  return tfm.get.room.objectList[id]
+  error('Not implemented')
 end
 
 function tfm.exec.addShamanObject(objectType, xPosition, yPosition, angle, xSpeed, ySpeed, ghost)
-  error('Not implemented')
+  local obj = Object(objectType, xPosition, yPosition, angle, xSpeed, ySpeed, ghost)
+  tfm.get.room.objectList[obj.id] = obj
+  print(label('[Map: (+)Sham Obj]') .. '\tID: ' .. obj.id .. ' | Type: ' .. objectType .. ' | X: ' .. xPosition .. ' Y: ' .. yPosition .. ' ...\t\t' .. func('(tfm.exec.addShamanObject)'))
+  return obj.id
 end
 
 function tfm.exec.changePlayerSize(playerName, size)

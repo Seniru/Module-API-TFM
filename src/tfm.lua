@@ -1,4 +1,5 @@
 local Object = require 'src.Object'
+local PhysicObject = require 'src.PhysicObject'
 local escapes = require 'src.escapes'
 local Conjuration = require 'src.Conjuration'
 
@@ -170,7 +171,8 @@ local tfm = {
     },
     --[[WARNING!!!: data field is not related with tfm's module API]]--
     data = {
-      chatMessages = {}
+      chatMessages = {},
+      physicObjects = {}
     }
   }
 }
@@ -190,7 +192,8 @@ function tfm.exec.addJoint(id, ground1, ground2, jointDef)
 end
 
 function tfm.exec.addPhysicObject(id, xPosition, yPosition, bodyDef)
-  error('Not implemented')
+    tfm.get.data.physicObjects[id] = PhysicObject(id, xPosition, yPosition, bodyDef)
+    print(label('[Map: (+)Phy Obj]') .. '\tID: ' .. id .. ' | X: ' .. xPosition .. ' | Y: ' .. yPosition .. ' ... \t\t' .. func('(tfm.exec.addPhysicObject)'))
 end
 
 function tfm.exec.addShamanObject(objectType, xPosition, yPosition, angle, xSpeed, ySpeed, ghost)

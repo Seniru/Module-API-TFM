@@ -4,6 +4,7 @@ require 'src.events'
 
 local tfm = require 'src.tfm'
 local Object = require 'src.Object'
+local PhysicObject = require 'src.PhysicObject'
 local Player = require 'src.Player'
 local Conjuration = require 'src.Conjuration'
 
@@ -130,6 +131,24 @@ function test:Object()
     
 end
 
+function test:PhysicObject()
+    assertType(PhysicObject(1, 20, 20, {type=1}), 'table') -- Should create a PhysicObject successfully
+    assertErrors(PhysicObject, 2, 20, 20, {}) -- Should throw an error when called without the type
+    
+    --general testing
+    local obj1 = PhysicObject(3, 10, 20, {type=1, width=10, foreground=true, groundCollision=false})
+    local obj2 = PhysicObject(4, 30, 40, {type=2, width=100, miceCollision=false, dynamic=true, fixedRotation=true, mass=5})
+    assertEqual(obj1.id, 3)
+    assertEqual(obj1.xPosition, 10)
+    assertEqual(obj2.yPosition, 40)
+    assertEqual(obj1.foreground, true)
+    assertEqual(obj2.foreground, false)
+    assertEqual(obj1.groundCollision, false)
+    assertEqual(obj1.miceCollision, true)
+    assertEqual(obj2.dynamic, true)
+
+end
+
 function test:Conjuration()
 
     local c1 = Conjuration.new(100, 200, 1000)
@@ -155,7 +174,19 @@ function test:tfm()
 
     assertErrors(tfm.exec.addImage) --addImage
     assertErrors(tfm.exec.addJoint) --addJoint
-    assertErrors(tfm.exec.addPhysicObject) --addPhysicObject
+    
+    --addPhysicObject
+    assertErrors(tfm.exec.addPhysicObject) -- Should throw an error when called without args
+    --general testing
+    tfm.exec.addPhysicObject(100, 200, 400, {type=3, width=100, height=200})
+    tfm.exec.addPhysicObject(200, 300, 500, {type=5, width=300, height=600, dynamic=true})
+    local obj1 = tfm.get.data.physicObjects[100]
+    local obj2 = tfm.get.data.physicObjects[200]
+    assertType(obj1, 'table')
+    assertNotEqual(obj1.id, obj2.id)
+    assertEqual(obj1.width, 100)
+    assertEqual(obj2.height, 600)
+
 
     --addShamanObject
     assertErrors(tfm.exec.addShamanObject) -- Should throw an error when called without args
@@ -309,7 +340,7 @@ function test:tfm()
     tfm.exec.setVampirePlayer('souris1')
     assertEqual(tfm.get.room.playerList['souris1'].isVampire, true)
 
-    --setSnow
+    --snow
     assertErrors(tfm.exec.snow, 'forever', 100) -- Should throw error for non nil or number values
     assertErrors(tfm.exec.snow, 2000, 'powerful') -- Should throw error for non nil or number values
 

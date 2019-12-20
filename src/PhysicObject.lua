@@ -1,8 +1,9 @@
-local config = require 'src.Config'
+local config = require 'extra.Config'
+local typeAssert = require 'extra.TypeError'
 
 function PhysicObject(id, x, y, bodyDef)
 
-    assert(type(bodyDef.type) == 'number', 'Expected a number for type, instead got ' .. type(bodyDef.type))
+    typeAssert('PhysicObject', 'number', 'bodyDef.type', bodyDef.type)
 
     bodyDef = setmetatable(bodyDef or {}, config)
     return {

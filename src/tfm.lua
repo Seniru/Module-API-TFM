@@ -1,7 +1,8 @@
+local escapes = require 'extra.escapes'
 local Object = require 'src.Object'
 local PhysicObject = require 'src.PhysicObject'
-local escapes = require 'src.escapes'
 local Conjuration = require 'src.Conjuration'
+local typeAssert = require 'extra.TypeError'
 
 require 'src.events'
 
@@ -178,7 +179,7 @@ local tfm = {
 }
 
 function tfm.exec.addConjuration(xPosition, yPosition, duration)
-  local conj = Conjuration.new(xPosition, yPosition, duration)
+  local conj = Conjuration(xPosition, yPosition, duration)
   print(label('[Map: Conjuration]') .. '\tX: ' .. conj.xPosition .. ' | Y: ' .. conj.yPosition .. ' | duration: ' .. conj.duration .. 's \t' .. func('(tfm.exec.addConjuration)'))
   return conj
 end
@@ -205,16 +206,16 @@ end
 
 function tfm.exec.changePlayerSize(playerName, size)
     size = size or 1
-    assert(type(playerName) == 'string', 'Expected type of string for playerName, instead got ' .. type(playerName))
-    assert(type(size) == 'number', 'Expected type of nil or number for size, instead got ' .. type(size))
+    typeAssert('changePlayerSize', 'string', 1, playerName)
+    typeAssert('changePlayerSize', {'number', 'nil'}, 2, size)
     assert(size >= 0.1 and size <= 5, 'Expected value between 0.1 to 5 for size, instead got ' .. size)
     print(label('[Player: Change size]') .. '\tplayer: ' .. playerName .. ' | size: ' .. (size or 1) .. '\t\t' .. func('(tfm.exec.changePlayerSize)'))
     tfm.get.room.playerList[playerName].size = size or 1
 end
 
 function tfm.exec.chatMessage(message, playerName)
-  assert(type(message) == 'string', 'Expected type of string for message, instead got type of ' .. type(message))
-  assert(playerName == nil or type(playerName) == 'string', 'Expected type of string or nil for playerName, instead got ' .. type(playerName))
+  typeAssert('chatMessage', 'string', 1, message)
+  typeAssert('chatMessage', {'string', 'nil'}, 2, playerName)
   table.insert(tfm.get.data, {message, playerName or 'All'})
   print(label('[Room: Chat message]') .. '\ttarget: ' .. (playerName or 'All') .. '\t\t\t\t' .. func('(tfm.exec.chatMessage)'))
   print(message)
@@ -286,22 +287,22 @@ end
 
 function tfm.exec.giveMeep(playerName, canMeep)
     canMeep = canMeep == nil and true or canMeep
-    assert(type(playerName) == 'string', 'Expected type of string for playerName, instead got ' .. type(playerName))
-    assert(type(canMeep) == 'boolean', 'Expected type of boolean or nil for canMeep, instead got ' .. type(canMeep))
+    typeAssert('giveMeep', 'string', 1, playerName)
+    typeAssert('giveMeep', 'boolean', 2, canMeep)
     print(label('[Player: ' .. (canMeep and '(+)' or '(-)') ..' Meep]') .. '\tplayer: ' .. playerName .. ' | canMeep: ' .. tostring(canMeep) .. '\t\t' .. func('(tfm.exec.giveMeep)'))
     tfm.get.room.playerList[playerName].canMeep = canMeep
 end
 
 function tfm.exec.giveTransformations(playerName, canTransform)
     canTransform = canTransform == nil and true or canTransform
-    assert(type(playerName) == 'string', 'Expected type of string for playerName, instead got ' .. type(playerName))
-    assert(type(canTransform) == 'boolean', 'Expected type of boolean or nil for canTransform, instead got ' .. type(canTransform))
+    typeAssert('giveTransformations', 'string', 1, playerName)
+    typeAssert('giveTransformations', 'boolean', 2, canTransform)
     print(label('[Player: ' .. (canTransform and '(+)' or '(-)') ..' Transform]') .. '\tplayer: ' .. playerName .. ' | canTransform: ' .. tostring(canTransform) .. '\t' .. func('(tfm.exec.giveTransformations)'))
     tfm.get.room.playerList[playerName].canTransform = canTransform
 end
 
 function tfm.exec.killPlayer(playerName)
-  assert(type(playerName) == 'string', 'Expected type of string for playerName, instead got ' .. type(playerName))
+  typeAssert('killPlayer', 'string', 1, playerName)
   if (tfm.get.room.playerList[playerName]) then
     tfm.get.room.playerList[playerName].isDead = true
   end
@@ -335,7 +336,7 @@ end
 
 function tfm.exec.playerVictory(playerName)
   local gave = false
-  assert(type(playerName) == 'string', 'Expected type of string for playerName, instead got ' .. type(playerName))
+  typeAssert('playerVictory', 'string', 1, playerName)
   if tfm.get.room.playerList[playerName].hasCheese then
       tfm.get.room.playerList[playerName].hasCheese = false
       if tfm.get.room.enabledAutoScore then
@@ -349,7 +350,7 @@ function tfm.exec.playerVictory(playerName)
 end
 
 function tfm.exec.removeCheese(playerName)
-  assert(type(playerName) == 'string', 'Expected type of string for playerName, instead got ' .. type(playerName))
+  typeAssert('removeCheese', 'string', 1, playerName)
   tfm.get.room.playerList[playerName].hasCheese = false
   print(label('[Player: (-) Cheese]') .. '\tplayer: ' .. playerName .. '\t\t\t\t' .. func('(tfm.exec.removeCheese)'))
 end
@@ -391,7 +392,7 @@ function tfm.exec.setPlayerScore(playerName, score, add)
 end
 
 function tfm.exec.setRoomMaxPlayers(maxPlayers)
-  assert(type(maxPlayers) == 'number', 'Expected type of number for maxPlayers, instead got ' .. type(maxPlayers))
+  typeAssert('setRoomMaxPlayers', 'number', 1, maxPlayers)
   tfm.get.room.maxPlayers = maxPlayers
   print(label('[Room: Max players]') .. '\tmaxPlayers: ' .. maxPlayers .. '\t\t\t\t' .. func('(tfm.exec.setRoomMaxPlayers)'))
 end
@@ -411,16 +412,16 @@ end
 
 function tfm.exec.setVampirePlayer(playerName, makeAVampire)
     makeAVampire = makeAVampire == nil and true or makeAVampire
-    assert(type(playerName) == 'string', 'Expected type of string for playerName, instead got ' .. type(playerName))
-    assert(type(makeAVampire) == 'boolean', 'Expected type of boolean or nil for makeAVampire, instrad got ' .. type(makeAVampire))
+    typeAssert('setVampirePlayer', 'string', 1, playerName)
+    typeAssert('setVampirePlayer', 'boolean', 2, makeAVampire)
     print(label('[Player: Vampire]') .. '\tplayer: ' .. playerName .. ' | status: ' .. tostring(makeAVampire) .. '\t\t' .. func('(tfm.exec.setVampirePlayer)'))    
     tfm.get.room.playerList[playerName].isVampire = makeAVampire
     eventPlayerVampire(playerName)
 end
 
 function tfm.exec.snow(duration, snowBallPower)
-  assert(type(duration) == 'number' or duration == nil, "Expected type of number or nil for duration, instead got " .. type(duration))
-  assert(type(snowBallPower) == 'number' or snowBallPower == nil, "Expected type of number or nil for snowBallPower, instead got " .. type(snowBallPower))
+  typeAssert('snow', {'number', 'nil'}, 1, duration)
+  typeAssert('snow', {'number', 'nil'}, 2, snowBallPower)
   print(label('[Room: Snowing]') .. '\t\tduration: ' .. (duration or 60) .. 's | Snow Power: ' .. (snowBallPower or 10) .. '\t\t' .. func('(tfm.exec.snow)'))
 end
 

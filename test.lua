@@ -1,5 +1,5 @@
 _ENV = require('lunity')()
-require 'src.escapes'
+require 'extra.escapes'
 require 'src.events'
 
 local tfm = require 'src.tfm'
@@ -11,7 +11,7 @@ local Conjuration = require 'src.Conjuration'
 function test:before()
     --insert players to the game
     for name, player in next, {
-       souris0 = Player.new('souris0', {}),
+        souris0 = Player.new('souris0', {}),
        souris1 = Player.new('souris1', {}),
        souris2 = Player.new('souris2', {})
     } do
@@ -115,7 +115,7 @@ function test:Object()
     -- general testing
     local obj1 = Object(1, 20, 40, 45, 2, 4, true, {0xFF0000, 0X000000})
     local obj2 = Object(5, 30, 50, 90, 1, 2, false)
-
+    
     assertEqual(obj1.angle, 45)
     assertEqual(obj1.baseType, 1)
     assertTableEquals(obj1.colors, {0xFF0000, 0x000000})
@@ -150,10 +150,10 @@ function test:PhysicObject()
 end
 
 function test:Conjuration()
-
-    local c1 = Conjuration.new(100, 200, 1000)
-    local c2 = Conjuration.new(200, 300)
-
+    
+    local c1 = Conjuration(100, 200, 1000)
+    local c2 = Conjuration(200, 300)
+    
     assertType(c1, 'table') -- Should create a Conjuration table when called new method
     assertType(c2, 'table') -- Should create a Conjuration table with default duration when duration is nil
     -- Should return correct
@@ -167,11 +167,11 @@ function test:Conjuration()
 end
 
 function test:tfm()
-
+    
     -- addConjuration
-    assertTableEquals(tfm.exec.addConjuration(200, 200, 100), Conjuration.new(200, 200, 100))
-    assertTableEquals(tfm.exec.addConjuration(200, 200), Conjuration.new(200, 200))
-
+    assertTableEquals(tfm.exec.addConjuration(200, 200, 100), Conjuration(200, 200, 100))
+    assertTableEquals(tfm.exec.addConjuration(200, 200), Conjuration(200, 200))
+    
     assertErrors(tfm.exec.addImage) --addImage
     assertErrors(tfm.exec.addJoint) --addJoint
     
@@ -329,7 +329,7 @@ function test:tfm()
 
     assertErrors(tfm.exec.setShaman)
     assertErrors(tfm.exec.setShamanMode)
-
+    
     --setVampirePlayer
     assertErrors(tfm.exec.setVampirePlayer, 100, true) -- Should throw error for non string characters for name
     assertErrors(tfm.exec.setVampirePlayer, 'souris0', 'make a vamp') -- Should throw error for non boolean values for makeAVamp
@@ -344,7 +344,7 @@ function test:tfm()
     assertErrors(tfm.exec.snow, 'forever', 100) -- Should throw error for non nil or number values
     assertErrors(tfm.exec.snow, 2000, 'powerful') -- Should throw error for non nil or number values
 
-
+    
 end
 
 function test:events()

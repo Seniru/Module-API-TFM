@@ -44,6 +44,7 @@ function Player.new(name, config)
     --[[WARNING! These fields are not included in TFM APJ]] self.size = 1
     self.canMeep = false
     self.canTransform = false
+    self.nameColor = 0xffffff
 
     return self
 end

@@ -391,8 +391,19 @@ function test:tfm()
     assertErrors(tfm.exec.respawnPlayer)
     assertErrors(tfm.exec.setAutoMapFlipMode)
     assertErrors(tfm.exec.setGameTime)
-    assertErrors(tfm.exec.setNameColor)
-    assertErrors(tfm.exec.setPlayerScore)
+
+    --setNameColor
+    assertErrors(tfm.exec.setNameColor) -- Should throw an error when called without args
+    tfm.exec.setNameColor('souris1', 0xff0000)
+    assertEqual(tfm.get.room.playerList['souris1'].nameColor, 0xff0000)
+    
+    assertErrors(tfm.exec.setPlayerScore) -- Should throw an error when called without args
+    tfm.exec.setPlayerScore('souris1', 100)
+    assertEqual(tfm.get.room.playerList['souris1'].score, 100)
+    tfm.exec.setPlayerScore('souris1', 200, false)
+    assertEqual(tfm.get.room.playerList['souris1'].score, 200)
+    tfm.exec.setPlayerScore('souris1', 50, true)
+    assertEqual(tfm.get.room.playerList['souris1'].score, 250)
 
     --setRoomMaxPlayers
     assertErrors(tfm.exec.setRoomMaxPlayers, 'five') -- Should throw an error for non number values

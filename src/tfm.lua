@@ -418,11 +418,26 @@ function tfm.exec.setGameTime(time, init)
 end
 
 function tfm.exec.setNameColor(playerName, color)
-    error('Not implemented')
+    typeAssert('setNameColor', 'string', 1, playerName)
+    typeAssert('setNameColor', 'number', 2, color)
+    local success = false
+    if tfm.get.room.playerList[playerName] then
+        tfm.get.room.playerList[playerName].nameColor = color
+        success = true
+    end
+    print(label('[Player: Name Color]') .. '\tplayer: ' .. playerName .. ' | color: ' .. tostring(success and color or false) .. " " .. func('(tfm.exec.setNameColor)'))
 end
 
 function tfm.exec.setPlayerScore(playerName, score, add)
-    error('Not implemented')
+    add = add or false
+    typeAssert('setPlayerScore', 'string', 1, playerName)
+    typeAssert('setPlayerScore', 'number', 2, score)
+    typeAssert('setPlayerScore', 'boolean', 3, add)
+    local success = false
+    if tfm.get.room.playerList[playerName] then
+        tfm.get.room.playerList[playerName].score = add and (tfm.get.room.playerList[playerName].score + score) or score
+    end
+    print(label('[Player: Score]') .. '\t\tplayer: ' .. playerName .. ' | add: ' .. tostring(success and score or false) .. '\t' .. func('(tfm.exec.setPlayerScore)'))
 end
 
 function tfm.exec.setRoomMaxPlayers(maxPlayers)

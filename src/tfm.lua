@@ -222,51 +222,85 @@ function tfm.exec.chatMessage(message, playerName)
 end
 
 function tfm.exec.disableAfkDeath(activate)
-    error('Not implemented')
+    activate = activate == nil and true or activate
+    typeAssert('disableAfkDeath', {'boolean'}, 1, activate)
+    tfm.get.room.enabledAfkDeath = not activate
+    print(label('[Room: Afk Death]') .. '\tdisabled: ' .. tostring(activate) .. '\t\t\t\t' .. func('(tfm.exec.disableAfkDeath)'))
 end
 
-function tfm.exec.disableAllShamanSkills(active)
-    error('Not implemented')
+function tfm.exec.disableAllShamanSkills(activate)
+    activate = activate == nil and true or activate
+    typeAssert('disableAllShamanSkills', 'boolean', 1, activate)
+    tfm.get.room.enabledAllShamanSkills = not activate
+    print(label('[Room: Shaman Skills]') .. '\tdisabled: ' .. tostring(activate) .. '\t\t\t\t' .. func('(tfm.exec.disableAllShamanSkills)'))
 end
 
 function tfm.exec.disableAutoNewGame(activate)
-    error('Not implemented')
+    activate = activate == nil and true or activate
+    typeAssert('disableAutoNewGame', 'boolean', 1, activate)
+    tfm.get.room.enabledAutoNewGame = not activate
+    print(label('[Room: Auto New Game]') .. '\tdisabled: ' .. tostring(activate) .. '\t\t\t\t' .. func('(tfm.exec.disableAutoNewGame)'))
 end
 
 function tfm.exec.disableAutoScore(activate)
-    error('Not implemented')
+    activate = activate == nil and true or activate
+    typeAssert('disableAutoScore', 'boolean', 1, activate)
+    tfm.get.room.enabledAutoScore = not activate
+    print(label('[Room: Afk Death]') .. '\tdisabled: ' .. tostring(activate) .. '\t\t\t\t' .. func('(tfm.exec.disableAfkDeath)'))
 end
 
 function tfm.exec.disableAutoShaman(activate)
-    error('Not implemented')
+    activate = activate == nil and true or activate
+    typeAssert('disableAutoShaman', 'boolean', 1, activate)
+    tfm.get.room.enabledAutoShaman = not activate
+    print(label('[Room: Auto Shaman]') .. '\tdisabled: ' .. tostring(activate) .. '\t\t\t\t' .. func('(tfm.exec.disableAutoShaman)'))
 end
 
 function tfm.exec.disableAutoTimeLeft(activate)
-    error('Not implemented')
+    --TODO: Implement this according to the docs
+    error("Not implemented")
 end
 
 function tfm.exec.disableDebugCommand(activate)
-    error('Not implemented')
+    activate = activate == nil and true or activate
+    typeAssert('disableDebugCommand', 'boolean', 1, activate)
+    tfm.get.room.enabledDebugCommand = not activate
+    print(label('[Room: Debug]') .. '\tdisabled: ' .. tostring(activate) .. '\t\t\t\t' .. func('(tfm.exec.disableDebugCommand)'))
 end
 
 function tfm.exec.disableMinimalistMode(activate)
-    error('Not implemented')
+    activate = activate == nil and true or activate
+    typeAssert('disableAfkDeath', 'boolean', 1, activate)
+    tfm.get.room.allowedMinimalistMode = not activate
+    print(label('[Room: Minimalist Mode]') .. '\tdisabled: ' .. tostring(activate) .. '\t\t\t\t' .. func('(tfm.exec.disableMinimalistMode)'))
 end
 
-function tfm.exec.disableMortCommand(active)
-    error('Not implemented')
+function tfm.exec.disableMortCommand(activate)
+    activate = activate == nil and true or activate
+    typeAssert('disableMortCommand', 'boolean', 1, activate)
+    tfm.get.room.allowedMortCommand = not activate
+    print(label('[Room: Mort]') .. '\tdisabled: ' .. tostring(activate) .. '\t\t\t\t' .. func('(tfm.exec.disableMortCommand)'))
 end
 
-function tfm.exec.disablePhysicalConsumables(active)
-    error('Not implemented')
+function tfm.exec.disablePhysicalConsumables(activate)
+    activate = activate == nil and true or activate    
+    typeAssert('disablePhysicalConsumables', 'boolean', 1, activate)
+    tfm.get.room.enabledPhysicalConsumables = not activate
+    print(label('[Room: Consumables]') .. '\tdisabled: ' .. tostring(activate) .. '\t\t\t\t' .. func('(tfm.exec.disablePhysicalConsumables)'))
 end
 
 function tfm.exec.disablePrespawnPreview(display)
-    error('Not implemented')
+    display = display == nil and true or display
+    typeAssert('disablePrespawnPreview', 'boolean', 1, display)
+    tfm.get.room.enabledPrespawnPreview = not display
+    print(label('[Room: Prespawn Preview]') .. '\tdisplay: ' .. tostring(display) .. '\t\t\t\t' .. func('(tfm.exec.disablePrespawnPreview)'))
 end
 
 function tfm.exec.disableWatchCommand(activate)
-    error('Not implemented')
+    activate = activate == nil and true or activate    
+    typeAssert('disableWatchCommand', 'boolean', 1, activate)
+    tfm.get.room.allowedWatchCommand = not activate
+    print(label('[Room: Watch]') .. '\tdisabled: ' .. tostring(activate) .. '\t\t\t\t' .. func('(tfm.exec.disableWatchCommand)'))
 end
 
 function tfm.exec.displayParticle(particleType, xPosition, yPosition, xSpeed, ySpeed, xAcceleration, yAcceleration, targetPlayer)

@@ -231,18 +231,96 @@ function test:tfm()
     tfm.exec.chatMessage('Testing ..') -- Sending message to everybody
     assertTableEquals(tfm.get.data[#tfm.get.data], {'Testing ..', 'All'})
 
-    assertErrors(tfm.exec.disableAfkDeath)
-    assertErrors(tfm.exec.disableAllShamanSkills)
-    assertErrors(tfm.exec.disableAutoNewGame)
-    assertErrors(tfm.exec.disableAutoScore)
-    assertErrors(tfm.exec.disableAutoShaman)
+    --disableAfkDeath
+    tfm.exec.disableAfkDeath()
+    assertEqual(tfm.get.room.enabledAfkDeath, false)
+    tfm.exec.disableAfkDeath(false)
+    assertEqual(tfm.get.room.enabledAfkDeath, true)
+    tfm.exec.disableAfkDeath(true)
+    assertEqual(tfm.get.room.enabledAfkDeath, false)
+    
+    --disableAllShamanSkills
+    tfm.exec.disableAllShamanSkills()
+    assertEqual(tfm.get.room.enabledAllShamanSkills, false)
+    tfm.exec.disableAllShamanSkills(false)
+    assertEqual(tfm.get.room.enabledAllShamanSkills, true)
+    tfm.exec.disableAllShamanSkills(true)
+    assertEqual(tfm.get.room.enabledAllShamanSkills, false)
+
+    --disableAutoNewGame
+    tfm.exec.disableAutoNewGame()
+    assertEqual(tfm.get.room.enabledAutoNewGame, false)
+    tfm.exec.disableAutoNewGame(false)
+    assertEqual(tfm.get.room.enabledAutoNewGame, true)
+    tfm.exec.disableAutoNewGame(true)
+    assertEqual(tfm.get.room.enabledAutoNewGame, false)
+
+    --disableAutoScore
+    tfm.exec.disableAutoScore()
+    assertEqual(tfm.get.room.enabledAutoScore, false)
+    tfm.exec.disableAutoScore(false)
+    assertEqual(tfm.get.room.enabledAutoScore, true)
+    tfm.exec.disableAutoScore(true)
+    assertEqual(tfm.get.room.enabledAutoScore, false)
+    
+    --disableAutoShaman
+    tfm.exec.disableAutoShaman()
+    assertEqual(tfm.get.room.enabledAutoShaman, false)
+    tfm.exec.disableAutoShaman(false)
+    assertEqual(tfm.get.room.enabledAutoShaman, true)
+    tfm.exec.disableAutoShaman(true)
+    assertEqual(tfm.get.room.enabledAutoShaman, false)
+
     assertErrors(tfm.exec.disableAutoTimeLeft)
-    assertErrors(tfm.exec.disableDebugCommand)
-    assertErrors(tfm.exec.disableMinimalistMode)
-    assertErrors(tfm.exec.disableMortCommand)
-    assertErrors(tfm.exec.disablePhysicalConsumables)
-    assertErrors(tfm.exec.disablePrespawnPreview)
-    assertErrors(tfm.exec.disableWatchCommand)
+
+    --disableDebugCommand
+    tfm.exec.disableDebugCommand()
+    assertEqual(tfm.get.room.enabledDebugCommand, false)
+    tfm.exec.disableDebugCommand(false)
+    assertEqual(tfm.get.room.enabledDebugCommand, true)
+    tfm.exec.disableDebugCommand(true)
+    assertEqual(tfm.get.room.enabledDebugCommand, false)
+
+    --disableMinimalistMode
+    tfm.exec.disableMinimalistMode()
+    assertEqual(tfm.get.room.allowedMinimalistMode, false)
+    tfm.exec.disableMinimalistMode(false)
+    assertEqual(tfm.get.room.allowedMinimalistMode, true)
+    tfm.exec.disableMinimalistMode(true)
+    assertEqual(tfm.get.room.allowedMinimalistMode, false)
+
+    --disableMortCommand
+    tfm.exec.disableMortCommand()
+    assertEqual(tfm.get.room.allowedMortCommand, false)
+    tfm.exec.disableMortCommand(false)
+    assertEqual(tfm.get.room.allowedMortCommand, true)
+    tfm.exec.disableMortCommand(true)
+    assertEqual(tfm.get.room.allowedMortCommand, false)
+
+    --disablePhysicalConsumables
+    tfm.exec.disablePhysicalConsumables()
+    assertEqual(tfm.get.room.enabledPhysicalConsumables, false)
+    tfm.exec.disablePhysicalConsumables(false)
+    assertEqual(tfm.get.room.enabledPhysicalConsumables, true)
+    tfm.exec.disablePhysicalConsumables(true)
+    assertEqual(tfm.get.room.enabledPhysicalConsumables, false)
+
+    --disablePrespawnPreview
+    tfm.exec.disablePrespawnPreview()
+    assertEqual(tfm.get.room.enabledPrespawnPreview, false)
+    tfm.exec.disablePrespawnPreview(false)
+    assertEqual(tfm.get.room.enabledPrespawnPreview, true)
+    tfm.exec.disablePrespawnPreview(true)
+    assertEqual(tfm.get.room.enabledPrespawnPreview, false)
+
+    --disableWatchCommand
+    tfm.exec.disableWatchCommand()
+    assertEqual(tfm.get.room.allowedWatchCommand, false)
+    tfm.exec.disableWatchCommand(false)
+    assertEqual(tfm.get.room.allowedWatchCommand, true)
+    tfm.exec.disableWatchCommand(true)
+    assertEqual(tfm.get.room.allowedWatchCommand, false)
+
     assertErrors(tfm.exec.displayParticle)
     assertErrors(tfm.exec.explosion)
     assertErrors(tfm.exec.giveCheese)

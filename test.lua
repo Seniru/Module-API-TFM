@@ -215,9 +215,7 @@ function test:tfm()
 
     --changePlayerSize
     assertErrors(tfm.exec.changePlayerSize, 0, 0)
-    assertErrors(tfm.exec.changePlayerSize, 'seniru', 2)
-    assertErrors(tfm.exec.changePlayerSize, 'seniru', 0)
-    assertErrors(tfm.exec.changePlayerSize, 'seniru', 6)
+    assertErrors(tfm.exec.changePlayerSize, 'seniru', 'five')
     tfm.exec.changePlayerSize('souris0', 3) -- changing size to 3
     assertEqual(tfm.get.room.playerList['souris0'].size, 3)
     tfm.exec.changePlayerSize('souris0', 1) -- changing size to default (1)
@@ -343,7 +341,7 @@ function test:tfm()
     
     --giveMeep
     assertErrors(tfm.exec.giveMeep, nil, true) -- Should throw errors for non-string playerNames
-    assertErrors(tfm.exec.giveMeep, 'true') -- Should throw errors for non nil or boolean values
+    assertErrors(tfm.exec.giveMeep, 'souris3', 'true') -- Should throw errors for non nil or boolean values
     tfm.exec.giveMeep('souris2', true)
     assertEqual(tfm.get.room.playerList['souris2'].canMeep, true)
     tfm.exec.giveMeep('souris0')
@@ -353,7 +351,7 @@ function test:tfm()
 
     --giveTransformations
     assertErrors(tfm.exec.giveTransformations, nil, true) -- Should throw errors for non-string playerNames
-    assertErrors(tfm.exec.giveTransformations, 'true') -- Should throw errors for non nil or boolean values
+    assertErrors(tfm.exec.giveTransformations, 'souris3', 'true') -- Should throw errors for non nil or boolean values
     tfm.exec.giveTransformations('souris2', true)
     assertEqual(tfm.get.room.playerList['souris2'].canTransform, true)
     tfm.exec.giveTransformations('souris0')

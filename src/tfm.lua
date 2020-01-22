@@ -210,8 +210,10 @@ function tfm.exec.changePlayerSize(playerName, size)
     typeAssert('changePlayerSize', 'string', 1, playerName)
     typeAssert('changePlayerSize', {'number', 'nil'}, 2, size)
     assert(size >= 0.1 and size <= 5, 'Expected value between 0.1 to 5 for size, instead got ' .. size)
-    print(label('[Player: Change size]') .. '\tplayer: ' .. playerName .. ' | size: ' .. (size or 1) .. '\t\t' .. func('(tfm.exec.changePlayerSize)'))
-    tfm.get.room.playerList[playerName].size = size or 1
+    if tfm.get.room.playerList[playerName] then
+        tfm.get.room.playerList[playerName].size = size or 1
+        print(label('[Player: Change size]') .. '\tplayer: ' .. playerName .. ' | size: ' .. (size or 1) .. '\t\t' .. func('(tfm.exec.changePlayerSize)'))
+    end
 end
 
 function tfm.exec.chatMessage(message, playerName)
@@ -315,16 +317,18 @@ function tfm.exec.explosion(xPosition, yPosition, power, radius, miceOnly)
     typeAssert('explosion', 'number', 3, power)
     typeAssert('explosion', 'number', 4, radius)
     typeAssert('explosion', 'boolean', 5, miceOnly)
-    print(label('[Game: Explosion]') .. '\tX: ' .. xPosition .. ' | Y: ' .. yPosition .. 'power:' .. power .. ' ... \t' .. func('(tfm.exec.explosion)'))
+    print(label('[Game: Explosion]') .. '\tX: ' .. xPosition .. ' | Y: ' .. yPosition .. ' | power: ' .. power .. ' ... \t\t' .. func('(tfm.exec.explosion)'))
     tfm.get.data.explosions[#tfm.get.data.explosions + 1] = {xPosition, yPosition, power, radius, miceOnly}
     return #tfm.get.data.explosions
 end
 
 function tfm.exec.giveCheese(playerName)
     typeAssert('giveCheese', 'string', 1, playerName)
-    tfm.get.room.playerList[playerName].hasCheese = true
-    print(label('[Player: (+) Cheese]') .. '\tplayer: ' .. playerName .. '\t\t\t\t' .. func('(tfm.exec.giveCheese)'))
-    eventPlayerGetCheese(playerName)
+    if tfm.get.room.playerList[playerName] then
+        tfm.get.room.playerList[playerName].hasCheese = true
+        print(label('[Player: (+) Cheese]') .. '\tplayer: ' .. playerName .. '\t\t\t\t' .. func('(tfm.exec.giveCheese)'))
+        eventPlayerGetCheese(playerName)
+    end
 end
 
 function tfm.exec.giveConsumables(playerName, consumableId, amount)
@@ -335,16 +339,20 @@ function tfm.exec.giveMeep(playerName, canMeep)
     canMeep = canMeep == nil and true or canMeep
     typeAssert('giveMeep', 'string', 1, playerName)
     typeAssert('giveMeep', 'boolean', 2, canMeep)
-    print(label('[Player: ' .. (canMeep and '(+)' or '(-)') ..' Meep]') .. '\tplayer: ' .. playerName .. ' | canMeep: ' .. tostring(canMeep) .. '\t\t' .. func('(tfm.exec.giveMeep)'))
-    tfm.get.room.playerList[playerName].canMeep = canMeep
+    if tfm.get.room.playerList[playerName] then
+        tfm.get.room.playerList[playerName].canMeep = canMeep
+        print(label('[Player: ' .. (canMeep and '(+)' or '(-)') ..' Meep]') .. '\tplayer: ' .. playerName .. ' | canMeep: ' .. tostring(canMeep) .. '\t\t' .. func('(tfm.exec.giveMeep)'))
+    end
 end
 
 function tfm.exec.giveTransformations(playerName, canTransform)
     canTransform = canTransform == nil and true or canTransform
     typeAssert('giveTransformations', 'string', 1, playerName)
     typeAssert('giveTransformations', 'boolean', 2, canTransform)
-    print(label('[Player: ' .. (canTransform and '(+)' or '(-)') ..' Transform]') .. '\tplayer: ' .. playerName .. ' | canTransform: ' .. tostring(canTransform) .. '\t' .. func('(tfm.exec.giveTransformations)'))
-    tfm.get.room.playerList[playerName].canTransform = canTransform
+    if tfm.get.room.playerList[playerName] then
+        tfm.get.room.playerList[playerName].canTransform = canTransform
+        print(label('[Player: ' .. (canTransform and '(+)' or '(-)') ..' Transform]') .. '\tplayer: ' .. playerName .. ' | canTransform: ' .. tostring(canTransform) .. '\t' .. func('(tfm.exec.giveTransformations)'))
+    end
 end
 
 function tfm.exec.killPlayer(playerName)
@@ -397,8 +405,10 @@ end
 
 function tfm.exec.removeCheese(playerName)
     typeAssert('removeCheese', 'string', 1, playerName)
-    tfm.get.room.playerList[playerName].hasCheese = false
-    print(label('[Player: (-) Cheese]') .. '\tplayer: ' .. playerName .. '\t\t\t\t' .. func('(tfm.exec.removeCheese)'))
+    if tfm.get.room.playerList[playerName] then
+        tfm.get.room.playerList[playerName].hasCheese = false
+        print(label('[Player: (-) Cheese]') .. '\tplayer: ' .. playerName .. '\t\t\t\t' .. func('(tfm.exec.removeCheese)'))
+    end
 end
 
 function tfm.exec.removeImage(imageId)
@@ -419,11 +429,13 @@ end
 
 function tfm.exec.respawnPlayer(playerName)
     typeAssert('respawnPlayer', 'string', 1, playerName)
-    tfm.get.room.playerList[playerName].isDead = false
-    tfm.get.room.playerList[playerName].x = 0
-    tfm.get.room.playerList[playerName].y = 0
-    print(label('[Player: Respawn]') .. '\t\tplayer: ' .. playerName .. ' | success: ' .. tostring(not not tfm.get.room.playerList[playerName]) .. '\t\t' .. func('(tfm.exec.respawnPlayer)'))
-    eventPlayerRespawn(playerName)
+    if tfm.get.room.playerList[playerName] then
+        tfm.get.room.playerList[playerName].isDead = false
+        tfm.get.room.playerList[playerName].x = 0
+        tfm.get.room.playerList[playerName].y = 0
+        print(label('[Player: Respawn]') .. '\t\tplayer: ' .. playerName .. ' | success: ' .. tostring(not not tfm.get.room.playerList[playerName]) .. '\t\t' .. func('(tfm.exec.respawnPlayer)'))
+        eventPlayerRespawn(playerName)
+    end
 end
 
 function tfm.exec.setAutoMapFlipMode(flipped)
@@ -472,8 +484,10 @@ function tfm.exec.setShaman(playerName, makeAShaman)
     makeAShaman = makeAShaman == nil and true or makeAShaman
     typeAssert('setShaman', 'string', 1, playerName)
     typeAssert('setShaman', 'boolean', 2, makeAShaman)
-    tfm.get.room.playerList[playerName].isShaman = makeAShaman
-    print(label('[Player: Shaman]') .. '\tplayer: ' .. playerName .. ' | status: ' .. tostring(makeAShaman) .. '\t\t' .. func('(tfm.exec.setShaman)'))
+    if tfm.get.room.playerList[playerName] then
+        tfm.get.room.playerList[playerName].isShaman = makeAShaman
+        print(label('[Player: Shaman]') .. '\tplayer: ' .. playerName .. ' | status: ' .. tostring(makeAShaman) .. '\t\t' .. func('(tfm.exec.setShaman)'))
+    end
 end
 
 function tfm.exec.setShamanMode(playerName, mode)
@@ -484,9 +498,11 @@ function tfm.exec.setVampirePlayer(playerName, makeAVampire)
     makeAVampire = makeAVampire == nil and true or makeAVampire
     typeAssert('setVampirePlayer', 'string', 1, playerName)
     typeAssert('setVampirePlayer', 'boolean', 2, makeAVampire)
-    print(label('[Player: Vampire]') .. '\tplayer: ' .. playerName .. ' | status: ' .. tostring(makeAVampire) .. '\t\t' .. func('(tfm.exec.setVampirePlayer)'))    
-    tfm.get.room.playerList[playerName].isVampire = makeAVampire
-    eventPlayerVampire(playerName)
+    if tfm.get.room.playerList[playerName] then
+        tfm.get.room.playerList[playerName].isVampire = makeAVampire
+        print(label('[Player: Vampire]') .. '\tplayer: ' .. playerName .. ' | status: ' .. tostring(makeAVampire) .. '\t\t' .. func('(tfm.exec.setVampirePlayer)'))    
+        eventPlayerVampire(playerName)
+    end
 end
 
 function tfm.exec.snow(duration, snowBallPower)

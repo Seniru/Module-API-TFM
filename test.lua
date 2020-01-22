@@ -322,8 +322,23 @@ function test:tfm()
     assertEqual(tfm.get.room.allowedWatchCommand, false)
 
     assertErrors(tfm.exec.displayParticle)
-    assertErrors(tfm.exec.explosion)
-    assertErrors(tfm.exec.giveCheese)
+
+    --explosion
+    assertErrors(tfm.exec.explosion) -- Should throw errors when called without args
+    local e1 = tfm.exec.explosion(10, 10, 30, 10)
+    local e2 = tfm.exec.explosion(20, 20, 40, 20, false)
+    local e3 = tfm.exec.explosion(30, 30, 30, 30, true)
+
+    assertTableEquals(tfm.get.data.explosions[1], {10, 10, 30, 10, false})
+    assertTableEquals(tfm.get.data.explosions[2], {20, 20, 40, 20, false})
+    assertTableEquals(tfm.get.data.explosions[3], {30, 30, 30, 30, true})
+
+    --giveCheese
+    assertErrors(tfm.exec.giveCheese) -- Should throw errors when called without args
+    tfm.get.room.playerList['souris1'].hasCheese = false
+    tfm.exec.giveCheese('souris1')
+    assertEqual(tfm.get.room.playerList['souris1'].hasCheese, true)
+
     assertErrors(tfm.exec.giveConsumables)
     
     --giveMeep
@@ -388,7 +403,15 @@ function test:tfm()
     assertErrors(tfm.exec.removeJoint)
     assertErrors(tfm.exec.removeObject)
     assertErrors(tfm.exec.removePhysicalObject)
-    assertErrors(tfm.exec.respawnPlayer)
+
+    --respawnPlayer
+    assertErrors(tfm.exec.respawnPlayer) -- Should throw errors for non-string names
+    tfm.get.room.playerList['souris2'].isDead = true
+    tfm.exec.respawnPlayer('souris2')
+    assertEqual(tfm.get.room.playerList['souris2'].isDead, false)
+    assertEqual(tfm.get.room.playerList['souris2'].x, 0)
+    assertEqual(tfm.get.room.playerList['souris2'].y, 0)
+
     assertErrors(tfm.exec.setAutoMapFlipMode)
     assertErrors(tfm.exec.setGameTime)
 
@@ -416,7 +439,21 @@ function test:tfm()
     tfm.exec.setRoomPassword('') -- Should unset the password, when password is blank
     assertEqual(tfm.get.room.passwordProtected, false)
 
-    assertErrors(tfm.exec.setShaman)
+    --setShaman
+    assertErrors(tfm.exec.setShaman) -- Should throw errors when called with a non-string name
+    --setting all players to non-shamans
+    for name, _ in next, tfm.get.room.playerList do
+        tfm.get.room.playerList[name].isShaman = false
+    end
+
+    tfm.exec.setShaman('souris0')
+    tfm.exec.setShaman('souris1', true)
+    tfm.exec.setShaman('souris2', false)
+
+    assertEqual(tfm.get.room.playerList['souris0'].isShaman, true)
+    assertEqual(tfm.get.room.playerList['souris1'].isShaman, true)
+    assertEqual(tfm.get.room.playerList['souris2'].isShaman, false)
+
     assertErrors(tfm.exec.setShamanMode)
     
     --setVampirePlayer

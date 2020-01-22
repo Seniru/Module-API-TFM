@@ -173,7 +173,8 @@ local tfm = {
         --[[WARNING!!!: data field is not related with tfm's module API]]--
         data = {
             chatMessages = {},
-            physicObjects = {}
+            physicObjects = {},
+            explosions = {}
         }
     }
 }
@@ -308,11 +309,22 @@ function tfm.exec.displayParticle(particleType, xPosition, yPosition, xSpeed, yS
 end
 
 function tfm.exec.explosion(xPosition, yPosition, power, radius, miceOnly)
-    error('Not implemented')
+    miceOnly = not not miceOnly
+    typeAssert('explosion', 'number', 1, xPosition)
+    typeAssert('explosion', 'number', 2, yPosition)
+    typeAssert('explosion', 'number', 3, power)
+    typeAssert('explosion', 'number', 4, radius)
+    typeAssert('explosion', 'boolean', 5, miceOnly)
+    print(label('[Game: Explosion]') .. '\tX: ' .. xPosition .. ' | Y: ' .. yPosition .. 'power:' .. power .. ' ... \t' .. func('(tfm.exec.explosion)'))
+    tfm.get.data.explosions[#tfm.get.data.explosions + 1] = {xPosition, yPosition, power, radius, miceOnly}
+    return #tfm.get.data.explosions
 end
 
 function tfm.exec.giveCheese(playerName)
-    error('Not implemented')
+    typeAssert('giveCheese', 'string', 1, playerName)
+    tfm.get.room.playerList[playerName].hasCheese = true
+    print(label('[Player: (+) Cheese]') .. '\tplayer: ' .. playerName .. '\t\t\t\t' .. func('(tfm.exec.giveCheese)'))
+    eventPlayerGetCheese(playerName)
 end
 
 function tfm.exec.giveConsumables(playerName, consumableId, amount)
@@ -406,7 +418,12 @@ function tfm.exec.removePhysicalObject(id)
 end
 
 function tfm.exec.respawnPlayer(playerName)
-    error('Not implemented')
+    typeAssert('respawnPlayer', 'string', 1, playerName)
+    tfm.get.room.playerList[playerName].isDead = false
+    tfm.get.room.playerList[playerName].x = 0
+    tfm.get.room.playerList[playerName].y = 0
+    print(label('[Player: Respawn]') .. '\t\tplayer: ' .. playerName .. ' | success: ' .. tostring(not not tfm.get.room.playerList[playerName]) .. '\t\t' .. func('(tfm.exec.respawnPlayer)'))
+    eventPlayerRespawn(playerName)
 end
 
 function tfm.exec.setAutoMapFlipMode(flipped)
@@ -452,7 +469,11 @@ function tfm.exec.setRoomPassword(password)
 end
 
 function tfm.exec.setShaman(playerName, makeAShaman)
-    error('Not implemented')
+    makeAShaman = makeAShaman == nil and true or makeAShaman
+    typeAssert('setShaman', 'string', 1, playerName)
+    typeAssert('setShaman', 'boolean', 2, makeAShaman)
+    tfm.get.room.playerList[playerName].isShaman = makeAShaman
+    print(label('[Player: Shaman]') .. '\tplayer: ' .. playerName .. ' | status: ' .. tostring(makeAShaman) .. '\t\t' .. func('(tfm.exec.setShaman)'))
 end
 
 function tfm.exec.setShamanMode(playerName, mode)

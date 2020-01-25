@@ -39,12 +39,13 @@ function Player.new(name, config)
     self.vy = config.vy or 0
     self.x = config.x or 0
     self.y = config.y or 0
-     --
 
-    --[[WARNING! These fields are not included in TFM APJ]] self.size = 1
+    --[[WARNING! These fields are not included in TFM APJ]] 
+    self.size = 1
     self.canMeep = false
     self.canTransform = false
     self.nameColor = 0xffffff
+    self.defaultShamanMode = self.shamanMode
 
     return self
 end

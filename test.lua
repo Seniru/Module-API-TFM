@@ -452,7 +452,17 @@ function test:tfm()
     assertEqual(tfm.get.room.playerList['souris1'].isShaman, true)
     assertEqual(tfm.get.room.playerList['souris2'].isShaman, false)
 
-    assertErrors(tfm.exec.setShamanMode)
+    --setShamanMode
+    assertErrors(tfm.exec.setShamanMode, nil) -- Should throw error for non string names
+    assertErrors(tfm.exec.setShamanMode, 'souris1', 'divine') -- Should throw error for non integer or non-nil values
+    tfm.exec.setShamanMode('souris1', 2)
+    assertEqual(tfm.get.room.playerList['souris1'].shamanMode, 2)
+    tfm.exec.setShamanMode('souris1', -1)
+    assertEqual(tfm.get.room.playerList['souris1'].shamanMode, 0) -- Should set to default
+    tfm.exec.setShamanMode('souris0', 1)
+    assertEqual(tfm.get.room.playerList['souris0'].shamanMode, 1)
+    tfm.exec.setShamanMode('souris0')
+    assertEqual(tfm.get.room.playerList['souris0'].shamanMode, 0) -- Should set to default
     
     --setVampirePlayer
     assertErrors(tfm.exec.setVampirePlayer, 100, true) -- Should throw error for non string characters for name

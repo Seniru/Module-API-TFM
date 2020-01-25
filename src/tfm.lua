@@ -179,6 +179,12 @@ local tfm = {
     }
 }
 
+local shamanModes = {
+    [0] = 'normal',
+    [1] = 'hard',
+    [2] = 'divine'
+}
+
 function tfm.exec.addConjuration(xPosition, yPosition, duration)
     local conj = Conjuration(xPosition, yPosition, duration)
     print(label('[Map: Conjuration]') .. '\tX: ' .. conj.xPosition .. ' | Y: ' .. conj.yPosition .. ' | duration: ' .. conj.duration .. 's \t' .. func('(tfm.exec.addConjuration)'))
@@ -491,7 +497,16 @@ function tfm.exec.setShaman(playerName, makeAShaman)
 end
 
 function tfm.exec.setShamanMode(playerName, mode)
-    error('Not implemented')
+    typeAssert('setShamanMode', 'string', 1, playerName)
+    typeAssert('setShamanMode', {'number', 'nil'}, 2, mode)
+    if tfm.get.room.playerList[playerName] then
+        if mode == nil or (mode >= 0 and mode < 3) then
+            tfm.get.room.playerList[playerName].shamanMode = mode or tfm.get.room.playerList[playerName].defaultShamanMode
+        else
+            tfm.get.room.playerList[playerName].shamanMode = tfm.get.room.playerList[playerName].defaultShamanMode
+        end
+        print(label('[Player: Shaman Mode]') .. '\tplayer: ' .. playerName .. ' | mode: ' .. shamanModes[tfm.get.room.playerList[playerName].shamanMode] .. '\t\t' .. func('(tfm.exec.setShamanMode)'))
+    end
 end
 
 function tfm.exec.setVampirePlayer(playerName, makeAVampire)

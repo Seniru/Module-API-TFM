@@ -167,8 +167,8 @@ local tfm = {
             allowedMortCommand = true,
             enabledPhysicalConsumables = true,
             enabledPrespawnPreview = true,
-            allowedWatchCommand = true
-      
+            allowedWatchCommand = true,
+            enabledMapFlipMode = nil      
         },
         --[[WARNING!!!: data field is not related with tfm's module API]]--
         data = {
@@ -439,13 +439,15 @@ function tfm.exec.respawnPlayer(playerName)
         tfm.get.room.playerList[playerName].isDead = false
         tfm.get.room.playerList[playerName].x = 0
         tfm.get.room.playerList[playerName].y = 0
-        print(label('[Player: Respawn]') .. '\t\tplayer: ' .. playerName .. ' | success: ' .. tostring(not not tfm.get.room.playerList[playerName]) .. '\t\t' .. func('(tfm.exec.respawnPlayer)'))
+        print(label('[Player: Respawn]') .. '\tplayer: ' .. playerName .. ' | success: ' .. tostring(not not tfm.get.room.playerList[playerName]) .. '\t\t' .. func('(tfm.exec.respawnPlayer)'))
         eventPlayerRespawn(playerName)
     end
 end
 
 function tfm.exec.setAutoMapFlipMode(flipped)
-    error('Not implemented')
+    typeAssert('setAutoMapFlipMode', {'boolean', 'nil'}, 1, flipped)
+    tfm.get.room.enabledMapFlipMode = flipped
+    print(label('[Map: Flipped]') .. '\t\tflipped: ' .. tostring(flipped == nil and 'default' or flipped) .. '\t\t\t\t' .. func('(tfm.exec.setAutoMapFlipMode)'))
 end
 
 function tfm.exec.setGameTime(time, init)

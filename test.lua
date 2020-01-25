@@ -410,7 +410,13 @@ function test:tfm()
     assertEqual(tfm.get.room.playerList['souris2'].x, 0)
     assertEqual(tfm.get.room.playerList['souris2'].y, 0)
 
-    assertErrors(tfm.exec.setAutoMapFlipMode)
+    --setAutoMapFlipMode
+    assertErrors(tfm.exec.setAutoMapFlipMode, 1) -- Should throw errors for non boolean and non-nil values
+    for _, mode in next, {true, false, nil} do
+        tfm.exec.setAutoMapFlipMode(mode)
+        assertEqual(tfm.get.room.enabledMapFlipMode, mode)
+    end
+
     assertErrors(tfm.exec.setGameTime)
 
     --setNameColor

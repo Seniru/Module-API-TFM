@@ -43,8 +43,7 @@ function Joint(id, ground1, ground2, jointDef)
     local p1 = jointDef.point1 and extractPointLocations(jointDef.point1)
     joint.x1 = p1 and p1[1]
     joint.y1 = p1 and p1[2]
-
-    if joint.type == 0 or joint.type == 2 then -- set point2 for distance and pulley joints
+    if joint.type == 0 then -- set point2 for distance and pulley joints
         joint.point2 = jointDef.point2 
         local p2 = jointDef.point2 and extractPointLocations(jointDef.point2)
         joint.x2 = p2 and p2[1]
@@ -52,8 +51,12 @@ function Joint(id, ground1, ground2, jointDef)
     elseif joint.type == 2 then -- setting point3 and point4 for pulley joints
         joint.point3 = jointDef.point3
         joint.point4 = jointDef.point4
+        joint.point2 = jointDef.point2 
+        local p2 = jointDef.point2 and extractPointLocations(jointDef.point2)
         local p3 = jointDef.point3 and extractPointLocations(jointDef.point3)
         local p4 = jointDef.point4 and extractPointLocations(jointDef.point4)
+        joint.x2 = p2 and p2[1]
+        joint.y2 = p2 and p2[2]
         joint.x3 = p3 and p3[1]
         joint.y3 = p3 and p3[2]
         joint.x4 = p4 and p4[1]
@@ -68,8 +71,5 @@ function Joint(id, ground1, ground2, jointDef)
     return joint
 
 end
-
-    local j1 = Joint(1, 100, 100, {type=0, point1="10,20", point2="30,40", point3="50,60"})
-    
 
 return Joint

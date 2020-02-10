@@ -2,6 +2,7 @@ local escapes = require 'extra.escapes'
 local Object = require 'src.Object'
 local PhysicObject = require 'src.PhysicObject'
 local Conjuration = require 'src.Conjuration'
+local Joint = require 'src.Joint'
 local typeAssert = require 'extra.TypeError'
 
 require 'src.events'
@@ -174,7 +175,8 @@ local tfm = {
         data = {
             chatMessages = {},
             physicObjects = {},
-            explosions = {}
+            explosions = {},
+            joints = {}
         }
     }
 }
@@ -184,6 +186,7 @@ local shamanModes = {
     [1] = 'hard',
     [2] = 'divine'
 }
+local jointTypes = {'distance', 'prismatic', 'pulley', 'revolute'}
 
 function tfm.exec.addConjuration(xPosition, yPosition, duration)
     local conj = Conjuration(xPosition, yPosition, duration)
@@ -196,7 +199,15 @@ function tfm.exec.addImage(imageId, target, xPosition, yPosition, targetPlayer)
 end
 
 function tfm.exec.addJoint(id, ground1, ground2, jointDef)
-    error('Not implemented')
+    -- defaulting the points locations to corresponding ground's center
+    local g1 = tfm.get.data.physicObjects[ground1]
+    local g2 = tfm.get.data.physicObjects[ground2]
+    jointDef.point1 = jointDef.point1 or (g1.xPosition + (g1.width / 2) .. "," .. (g1.yPosition + (g1.height / 2)))
+    jointDef.point2 = jointDef.point2 or (g2.xPosition + (g2.width / 2) .. "," .. (g2.yPosition + (g2.height / 2)))
+    local joint = Joint(id, ground1, ground2, jointDef)
+    tfm.get.data.joints[id] = joint
+    print(label('[Map: Joint]') .. '\t\tid: ' .. id .. ' | type: ' .. jointTypes[jointDef.type + 1] .. ' | visible: ' .. tostring(joint.visible) .. '\t\t' .. func('(tfm.exec.addJoint)'))
+    return joint
 end
 
 function tfm.exec.addPhysicObject(id, xPosition, yPosition, bodyDef)
@@ -387,7 +398,7 @@ function tfm.exec.movePlayer(playerName, xPosition, yPosition, positionOffset, x
 end
 
 function tfm.exec.newGame(mapCode, flipped)
-    error('Not implemented')
+    error("Not implemented")
 end
 
 function tfm.exec.playEmote(playerName, emoteId, emoteArg)

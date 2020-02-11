@@ -206,7 +206,7 @@ function tfm.exec.addJoint(id, ground1, ground2, jointDef)
     jointDef.point2 = jointDef.point2 or (g2.xPosition + (g2.width / 2) .. "," .. (g2.yPosition + (g2.height / 2)))
     local joint = Joint(id, ground1, ground2, jointDef)
     tfm.get.data.joints[id] = joint
-    print(label('[Map: Joint]') .. '\t\tid: ' .. id .. ' | type: ' .. jointTypes[jointDef.type + 1] .. ' | visible: ' .. tostring(joint.visible) .. '\t\t' .. func('(tfm.exec.addJoint)'))
+    print(label('[Map: Joint]') .. '\t\tid: ' .. id .. ' | type: ' .. jointTypes[jointDef.type + 1] .. ' | visible: ' .. tostring(joint.visible) .. '\t' .. func('(tfm.exec.addJoint)'))
     return joint
 end
 
@@ -433,7 +433,9 @@ function tfm.exec.removeImage(imageId)
 end
 
 function tfm.exec.removeJoint(id)
-    error('Not implemented')
+    typeAssert('removeJoint', 'number', 1, id)
+    tfm.get.data.joints[id] = nil
+    print(label('[Room: (-) Joint]') .. '\tid: ' .. id .. '\t\t\t\t\t' .. func('(tfm.exec.removeJoint)'))
 end
 
 function tfm.exec.removeObject(objectId)

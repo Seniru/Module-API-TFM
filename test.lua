@@ -439,7 +439,12 @@ function test:tfm()
     assertEqual(tfm.get.room.playerList['souris2'].hasCheese, false)
 
     assertErrors(tfm.exec.removeImage)
-    assertErrors(tfm.exec.removeJoint)
+    
+    -- removeJoint
+    assertErrors(tfm.exec.removeJoint) -- Should throw errors for nil args
+    assertDoesNotError(tfm.exec.removeJoint, 1) -- Shouldn't throw errors for integer ids
+    assertEqual(tfm.get.data.joints[1], nil)
+
     assertErrors(tfm.exec.removeObject)
     assertErrors(tfm.exec.removePhysicalObject)
 

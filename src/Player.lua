@@ -46,6 +46,7 @@ function Player.new(name, config)
     self.canTransform = false
     self.nameColor = 0xffffff
     self.defaultShamanMode = self.shamanMode
+    self.inventory = {}
 
     return self
 end

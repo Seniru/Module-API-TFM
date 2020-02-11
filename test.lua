@@ -378,7 +378,14 @@ function test:tfm()
     tfm.exec.giveCheese('souris1')
     assertEqual(tfm.get.room.playerList['souris1'].hasCheese, true)
 
-    assertErrors(tfm.exec.giveConsumables)
+    --giveConsumables
+    assertErrors(tfm.exec.giveConsumables) -- Should throw errors when called without args
+    assertDoesNotError(tfm.exec.giveConsumables, 'NonExistingPlayer', 'id') -- Shouldn't throw errors when consumables are given to players who are not in the room
+    tfm.exec.giveConsumables('souris1', 'Balls')
+    assertEqual(tfm.get.room.playerList['souris1'].inventory['Balls'], 1)
+    tfm.exec.giveConsumables('souris1', 'Balls', 99)
+    tfm.exec.giveConsumables('souris1', 'Snowball', 50)
+    assertTableEquals(tfm.get.room.playerList['souris1'].inventory, {['Balls'] = 100, ["Snowball"] = 50})
     
     --giveMeep
     assertErrors(tfm.exec.giveMeep, nil, true) -- Should throw errors for non-string playerNames

@@ -349,7 +349,14 @@ function tfm.exec.giveCheese(playerName)
 end
 
 function tfm.exec.giveConsumables(playerName, consumableId, amount)
-    error('Not implemented')
+    amount = amount or 1
+    typeAssert('giveConsumables', 'string', 1, playerName)
+    typeAssert('giveConsumables', 'string', 2, consumableId)
+    typeAssert('giveConsumables', 'number', 3, amount)
+    if tfm.get.room.playerList[playerName] then
+        tfm.get.room.playerList[playerName].inventory[consumableId] = (tfm.get.room.playerList[playerName].inventory[consumableId] or 0) + amount
+        print(label('[Player: (+)Consumable]') .. '\tplayer: ' .. playerName .. ' | consumable: ' .. consumableId .. ' | amount: ' .. amount .. '\t' .. func('(tfm.exec.giveConsumables)'))
+    end
 end
 
 function tfm.exec.giveMeep(playerName, canMeep)

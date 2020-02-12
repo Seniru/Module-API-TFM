@@ -21,6 +21,7 @@ function test:before()
 
     tfm.exec.addPhysicObject(100, 200, 400, {type=3, width=100, height=200})
     tfm.exec.addPhysicObject(200, 300, 500, {type=5, width=300, height=600, dynamic=true})
+    tfm.exec.addPhysicObject(1000, 10, 10, {type=2, width=10, height=10})
 
 end
 
@@ -480,8 +481,12 @@ function test:tfm()
     assertDoesNotError(tfm.exec.removeJoint, 1) -- Shouldn't throw errors for integer ids
     assertEqual(tfm.get.data.joints[1], nil)
 
-    assertErrors(tfm.exec.removeObject)
-    assertErrors(tfm.exec.removePhysicalObject)
+    -- removeObject
+    assertErrors(tfm.exec.removeObject) -- Should throw errors for non number args
+    tfm.exec.removeObject(1000)
+    assertEqual(tfm.get.room.objectList[1000], nil)
+
+    assertErrors(tfm.exec.removePhysicObject)
 
     --respawnPlayer
     assertErrors(tfm.exec.respawnPlayer) -- Should throw errors for non-string names

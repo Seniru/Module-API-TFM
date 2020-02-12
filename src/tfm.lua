@@ -480,10 +480,12 @@ function tfm.exec.removeJoint(id)
 end
 
 function tfm.exec.removeObject(objectId)
-    error('Not implemented')
+    typeAssert('removeObject', 'number', 1, objectId)
+    tfm.get.room.objectList[objectId] = nil
+    print(label('[Map: (-) Sham Obj]') .. '\tID: ' .. objectId .. '\t\t\t\t\t' .. func('(tfm.exec.removeObject)'))
 end
 
-function tfm.exec.removePhysicalObject(id)
+function tfm.exec.removePhysicObject(id)
     error('Not implemented')
 end
 

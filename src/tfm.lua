@@ -339,6 +339,16 @@ function tfm.exec.explosion(xPosition, yPosition, power, radius, miceOnly)
     return #tfm.get.data.explosions
 end
 
+function tfm.exec.freezePlayer(playerName, freeze)
+    freeze = freeze == nil and true or freeze
+    typeAssert('freezePlayer', 'string', 1, playerName)
+    typeAssert('freezePlayer', 'boolean', 2, freeze)
+    if tfm.get.room.playerList[playerName] then
+        tfm.get.room.playerList[playerName].isFrozen = freeze
+        print(label('[Player: Freeze]') .. '\tplayer: ' .. playerName .. ' | freeze: ' .. tostring(freeze) .. '\t\t' .. func('(tfm.exec.freezePlayer)'))
+    end
+end
+
 function tfm.exec.giveCheese(playerName)
     typeAssert('giveCheese', 'string', 1, playerName)
     if tfm.get.room.playerList[playerName] then

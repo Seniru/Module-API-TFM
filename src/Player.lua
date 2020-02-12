@@ -44,6 +44,7 @@ function Player.new(name, config)
     self.size = 1
     self.canMeep = false
     self.canTransform = false
+    self.isFrozen = false
     self.nameColor = 0xffffff
     self.defaultShamanMode = self.shamanMode
     self.inventory = {}

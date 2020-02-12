@@ -372,6 +372,15 @@ function test:tfm()
     assertTableEquals(tfm.get.data.explosions[2], {20, 20, 40, 20, false})
     assertTableEquals(tfm.get.data.explosions[3], {30, 30, 30, 30, true})
 
+    --freezePlayer
+    assertErrors(tfm.exec.freezePlayer) -- Should throw erros when called without args
+    tfm.exec.freezePlayer('souris1')
+    assertEqual(tfm.get.room.playerList['souris1'].isFrozen, true)
+    tfm.exec.freezePlayer('souris1', false)
+    assertEqual(tfm.get.room.playerList['souris1'].isFrozen, false)
+    tfm.exec.freezePlayer('souris1', true)
+    assertEqual(tfm.get.room.playerList['souris1'].isFrozen, true)
+
     --giveCheese
     assertErrors(tfm.exec.giveCheese) -- Should throw errors when called without args
     tfm.get.room.playerList['souris1'].hasCheese = false

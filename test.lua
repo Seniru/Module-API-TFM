@@ -423,7 +423,12 @@ function test:tfm()
     assertDoesNotError(tfm.exec.killPlayer, 'tig') -- Shouldn't throw errors for non-existing players
     
     assertErrors(tfm.exec.linkMice)
-    assertErrors(tfm.exec.lowerSyncDelay)
+
+    --lowerSyncDelay
+    assertErrors(tfm.exec.lowerSyncDelay) -- Should throw an error for non-string names
+    tfm.exec.lowerSyncDelay('souris1')
+    assertEqual(tfm.get.room.playerList['souris1'].syncDelay, 400)
+
     assertErrors(tfm.exec.moveObject)
     assertErrors(tfm.exec.movePlayer)
     assertErrors(tfm.exec.newGame)

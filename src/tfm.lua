@@ -391,7 +391,7 @@ end
 
 function tfm.exec.killPlayer(playerName)
     typeAssert('killPlayer', 'string', 1, playerName)
-    if (tfm.get.room.playerList[playerName]) then
+    if tfm.get.room.playerList[playerName] then
         tfm.get.room.playerList[playerName].isDead = true
     end
     print(label('[Player: Kill]') .. '\t\tplayer: ' .. playerName .. ' | success: ' .. tostring(not not tfm.get.room.playerList[playerName]) .. '\t\t' .. func('(tfm.exec.killPlayer)'))
@@ -403,7 +403,11 @@ function tfm.exec.linkMice(playerName1, playerName2, linked)
 end
 
 function tfm.exec.lowerSyncDelay(playerName)
-    error('Not implemented')
+    typeAssert('lowerSyncDelay', 'string', 1, playerName)
+    if tfm.get.room.playerList[playerName] then
+        tfm.get.room.playerList[playerName].syncDelay = 400
+        print(label('[Player: (-) Sync delay') .. '\t' .. 'player: ' .. playerName .. '\t\t\t\t' .. func('(tfm.exec.lowerSyncDelay)'))
+    end
 end
 
 function tfm.exec.moveObject(objectId, xPosition, yPosition, positionOffset, xSpeed, ySpeed, speedOffset, angle, angleOffset)

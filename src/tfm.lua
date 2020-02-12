@@ -419,7 +419,19 @@ function tfm.exec.newGame(mapCode, flipped)
 end
 
 function tfm.exec.playEmote(playerName, emoteId, emoteArg)
-    error('Not implemented')
+    typeAssert('playEmote', 'string', 1, playerName)
+    typeAssert('playEmote', 'number', 2, emoteId)
+    typeAssert('playEmote', {'nil', 'string'}, 3, emoteArg)
+    if tfm.get.room.playerList[playerName] then
+        local emoteName = ''
+        for name, id in next, tfm.enum.emote do
+            if id == emoteId then
+                emoteName = name
+            end
+        end
+        print(label('[Player: Emote]') .. '\t\tplayer: ' .. playerName .. ' | emote: ' .. emoteId.. ' (' .. emoteName .. ')' .. (emoteArg and ' | args: ' .. emoteArg or '') .. '\t' .. func('(tfm.exec.playEmote)')) 
+        eventEmotePlayed(playerName, emoteId, emoteArg)
+    end
 end
 
 function tfm.exec.playerVictory(playerName)

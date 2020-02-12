@@ -427,7 +427,11 @@ function test:tfm()
     assertErrors(tfm.exec.moveObject)
     assertErrors(tfm.exec.movePlayer)
     assertErrors(tfm.exec.newGame)
-    assertErrors(tfm.exec.playEmote)
+    
+    --playEmote
+    assertErrors(tfm.exec.playEmote) -- Should throw errors when called without args
+    assertDoesNotError(tfm.exec.playEmote, 'souris1', 3)
+    assertDoesNotError(tfm.exec.playEmote, 'souris1', 10, 'lk')
 
     --playerVictory
     assertErrors(tfm.exec.playerVictory, nil) -- Should throw errors for non-string names

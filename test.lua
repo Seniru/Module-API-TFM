@@ -22,7 +22,6 @@ function test:before()
     tfm.exec.addPhysicObject(100, 200, 400, {type=3, width=100, height=200})
     tfm.exec.addPhysicObject(200, 300, 500, {type=5, width=300, height=600, dynamic=true})
     tfm.exec.addPhysicObject(1000, 10, 10, {type=2, width=10, height=10})
-
 end
 
 function test:escapes()
@@ -482,11 +481,15 @@ function test:tfm()
     assertEqual(tfm.get.data.joints[1], nil)
 
     -- removeObject
-    assertErrors(tfm.exec.removeObject) -- Should throw errors for non number args
+    assertErrors(tfm.exec.removeObject) -- Should throw errors for non number ids
     tfm.exec.removeObject(1000)
     assertEqual(tfm.get.room.objectList[1000], nil)
 
-    assertErrors(tfm.exec.removePhysicObject)
+    -- removePhysicObject
+    tfm.exec.addShamanObject(2, 4, 5, 100, 200, 90, true)
+    assertErrors(tfm.exec.removePhysicObject) -- Should throw erros for non number ids
+    tfm.exec.removePhysicObject(1000)
+    assertEqual(tfm.get.data.physicObjects[1000], nil)
 
     --respawnPlayer
     assertErrors(tfm.exec.respawnPlayer) -- Should throw errors for non-string names

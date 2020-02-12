@@ -486,7 +486,9 @@ function tfm.exec.removeObject(objectId)
 end
 
 function tfm.exec.removePhysicObject(id)
-    error('Not implemented')
+    typeAssert('removePhysicObject', 'number', 1, id)
+    tfm.get.data.physicObjects[id] = nil
+    print(label('[Map: (-) Phy Obj]') .. '\tID: ' .. id .. '\t\t\t\t\t' .. func('(tfm.exec.removePhysicObject)'))
 end
 
 function tfm.exec.respawnPlayer(playerName)

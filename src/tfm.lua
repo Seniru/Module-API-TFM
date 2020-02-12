@@ -399,7 +399,15 @@ function tfm.exec.killPlayer(playerName)
 end
 
 function tfm.exec.linkMice(playerName1, playerName2, linked)
-    error('Not implemented')
+    linked = linked == nil and true or linked
+    typeAssert('linkMice', 'string', 1, playerName1)
+    typeAssert('linkMice', 'string', 2, playerName2)
+    typeAssert('linkMice', 'boolean', 3, linked)
+    if tfm.get.room.playerList[playerName1] and tfm.get.room.playerList[playerName2] and playerName1 ~= playerName2 then
+        tfm.get.room.playerList[playerName1].linkedTo = linked and playerName2 or nil
+        tfm.get.room.playerList[playerName2].linkedTo = linked and playerName1 or nil
+        print(label('[Player: Link]') .. '\t\tp1: ' .. playerName1 .. ' | p2: ' .. playerName2 .. ' | linked: ' .. tostring(linked) .. func(' (tfm.exec.linkMice)'))
+    end
 end
 
 function tfm.exec.lowerSyncDelay(playerName)

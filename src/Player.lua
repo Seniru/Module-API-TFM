@@ -48,6 +48,7 @@ function Player.new(name, config)
     self.nameColor = 0xffffff
     self.syncDelay = 500
     self.defaultShamanMode = self.shamanMode
+    self.linkedTo = nil
     self.inventory = {}
 
     return self

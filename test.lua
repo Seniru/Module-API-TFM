@@ -422,7 +422,17 @@ function test:tfm()
     assertEqual(tfm.get.room.playerList['souris1'].isDead, true)
     assertDoesNotError(tfm.exec.killPlayer, 'tig') -- Shouldn't throw errors for non-existing players
     
-    assertErrors(tfm.exec.linkMice)
+    --linkMice
+    assertErrors(tfm.exec.linkMice) -- Should throw an error for nil args
+    tfm.exec.linkMice('souris0', 'souris1')
+    assertEqual(tfm.get.room.playerList['souris0'].linkedTo, 'souris1')
+    assertEqual(tfm.get.room.playerList['souris1'].linkedTo, 'souris0')
+    tfm.exec.linkMice('souris0', 'souris1', false)
+    assertEqual(tfm.get.room.playerList['souris0'].linkedTo, nil)
+    assertEqual(tfm.get.room.playerList['souris1'].linkedTo, nil)
+    tfm.exec.linkMice('souris0', 'souris1', true)
+    assertEqual(tfm.get.room.playerList['souris0'].linkedTo, 'souris1')
+    assertEqual(tfm.get.room.playerList['souris1'].linkedTo, 'souris0')
 
     --lowerSyncDelay
     assertErrors(tfm.exec.lowerSyncDelay) -- Should throw an error for non-string names

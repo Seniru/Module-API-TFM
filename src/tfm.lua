@@ -277,8 +277,10 @@ function tfm.exec.disableAutoShaman(activate)
 end
 
 function tfm.exec.disableAutoTimeLeft(activate)
-    --TODO: Implement this according to the docs
-    error("Not implemented")
+    activate = activate == nil and true or activate
+    typeAssert('disableAutoTimeLeft', 'boolean', 1, activate)
+    tfm.get.room.enabledAutoTimeLeft = not activate
+    print(label('[Room: Auto Timeleft]') .. '\tdisabled: ' .. tostring(activate) .. '\t\t\t\t' .. func('(tfm.exec.disableAutoTimeLeft)'))
 end
 
 function tfm.exec.disableDebugCommand(activate)

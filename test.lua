@@ -310,7 +310,13 @@ function test:tfm()
     tfm.exec.disableAutoShaman(true)
     assertEqual(tfm.get.room.enabledAutoShaman, false)
 
-    assertErrors(tfm.exec.disableAutoTimeLeft)
+    --disableAutoTimeLeft
+    tfm.exec.disableAutoTimeLeft()
+    assertEqual(tfm.get.room.enabledAutoTimeLeft, false)
+    tfm.exec.disableAutoTimeLeft(false)
+    assertEqual(tfm.get.room.enabledAutoTimeLeft, true)
+    tfm.exec.disableAutoTimeLeft(true)
+    assertEqual(tfm.get.room.enabledAutoTimeLeft, false)
 
     --disableDebugCommand
     tfm.exec.disableDebugCommand()

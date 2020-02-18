@@ -8,6 +8,7 @@ local PhysicObject = require 'src.PhysicObject'
 local Player = require 'src.Player'
 local Conjuration = require 'src.Conjuration'
 local Joint = require 'src.Joint'
+local Particle = require 'src.Particle'
 
 function test:before()
     --insert players to the game
@@ -198,6 +199,29 @@ function test:Joint()
 
 end
 
+function test:Particle()
+
+    assertErrors(Particle) -- Should throw errors when called without args
+
+    local particle = Particle(1, 10, 20, 30, 30, 10, 20)
+    local particle2 = Particle(2, 30, 50)
+
+    assertType(particle, "table")
+    assertType(particle2, "table")
+    assertEqual(particle.particleType, 1)
+    assertEqual(particle2.xPosition, 30)
+    assertEqual(particle.yPosition, 20)
+    assertEqual(particle.xSpeed, 30)
+    assertEqual(particle.ySpeed, 30)
+    assertEqual(particle.xAcceleration, 10)
+    assertEqual(particle.yAcceleration, 20)
+    assertEqual(particle2.xSpeed, 0)
+    assertEqual(particle2.ySpeed, 0)
+    assertEqual(particle2.xAcceleration, 0)
+    assertEqual(particle2.yAcceleration, 0)
+
+end
+
 function test:tfm()
     
     -- addConjuration
@@ -366,8 +390,28 @@ function test:tfm()
     tfm.exec.disableWatchCommand(true)
     assertEqual(tfm.get.room.allowedWatchCommand, false)
 
-    assertErrors(tfm.exec.displayParticle)
+    --displayParticle
+    assertErrors(tfm.exec.displayParticle) -- Should throw errors when called without args
+    local particle1 = tfm.exec.displayParticle(3, 10, 10, 300, 300, 1000, 1000, nil)
+    local particle2 = tfm.exec.displayParticle(4, 20, 20, 400, 400, 2000, 2000, 'souris1')
+    local particle3 = tfm.exec.displayParticle(5, 30, 30)
+    local particle4 = tfm.exec.displayParticle(30, 30, 30)
+    local particle5 = tfm.exec.displayParticle(10, 30, 30, nil, nil, nil, nil, 'souris2')
+    local particle6 = tfm.exec.displayParticle(30, 50, 50, nil, nil, nil, nil, 'souris2')
 
+    -- general tests
+    assertEqual(particle1.particleType, 3)
+    assertEqual(particle2.xSpeed, 400)
+    assertEqual(particle3.yAcceleration, 0)
+    -- testing if particles were displayed and stored correctly
+    assertTableEquals(tfm.get.data.particles.head, particle4)
+    assertTableEquals(tfm.get.data.particles.all[1], particle1)
+    assertTableEquals(tfm.get.data.particles['souris1'].all[1], particle2)
+    assertTableEquals(tfm.get.data.particles['souris1'].all[1], tfm.get.data.particles['souris1'].head)
+    assertTableEquals(tfm.get.data.particles['souris2'].all[1], particle5)
+    assertTableEquals(tfm.get.data.particles['souris2'].all[2], particle6)
+    assertTableEquals(tfm.get.data.particles['souris2'].all[2], tfm.get.data.particles['souris2'].head)
+    assertEqual(tfm.get.data.particles['souris2'].head.particleType, 30)
     --explosion
     assertErrors(tfm.exec.explosion) -- Should throw errors when called without args
     local e1 = tfm.exec.explosion(10, 10, 30, 10)

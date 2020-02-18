@@ -3,6 +3,7 @@ local Object = require 'src.Object'
 local PhysicObject = require 'src.PhysicObject'
 local Conjuration = require 'src.Conjuration'
 local Joint = require 'src.Joint'
+local Particle = require 'src.Particle'
 local typeAssert = require 'extra.TypeError'
 
 require 'src.events'
@@ -176,7 +177,11 @@ local tfm = {
             chatMessages = {},
             physicObjects = {},
             explosions = {},
-            joints = {}
+            joints = {},
+            particles = {
+                all = {},
+                head = nil
+            }
         }
     }
 }
@@ -326,7 +331,33 @@ function tfm.exec.disableWatchCommand(activate)
 end
 
 function tfm.exec.displayParticle(particleType, xPosition, yPosition, xSpeed, ySpeed, xAcceleration, yAcceleration, targetPlayer)
-    error('Not implemented')
+    local particle = Particle(particleType, xPosition, yPosition, xSpeed, ySpeed, xAcceleration, yAcceleration)
+    local type = nil
+
+    for name, id in next, tfm.enum.particle do
+        if id == particleType then
+            type = name
+        end
+    end
+
+    if not targetPlayer then
+        tfm.get.data.particles.all[#tfm.get.data.particles.all + 1] = particle
+        tfm.get.data.particles.head = particle
+    else
+        if not tfm.get.data.particles[targetPlayer] then
+            tfm.get.data.particles[targetPlayer] = {
+                all = {particle},
+                head = particle
+            }
+        else
+            tfm.get.data.particles[targetPlayer].all[#tfm.get.data.particles[targetPlayer].all + 1] = particle
+            tfm.get.data.particles[targetPlayer].head = particle
+        end
+    end
+
+    print(label('[Game: Particle]') .. '\ttarget: ' .. (targetPlayer or 'All') .. ' | particle: ' .. particleType .. (type and ' (' .. type .. ')' or '') .. ' ...\t' .. func('(tfm.exec.displayParticle)'))
+
+    return particle
 end
 
 function tfm.exec.explosion(xPosition, yPosition, power, radius, miceOnly)

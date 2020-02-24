@@ -489,8 +489,35 @@ function test:tfm()
     tfm.exec.lowerSyncDelay('souris1')
     assertEqual(tfm.get.room.playerList['souris1'].syncDelay, 400)
 
-    assertErrors(tfm.exec.moveObject)
-    
+    --moveObject
+    assertErrors(tfm.exec.moveObject) -- Should throw error when called without args
+    local id = tfm.exec.addShamanObject(3, 4, 5, 100, 200, 90, true)
+    --should move to the absolute position always, when the position offset is false
+    tfm.exec.moveObject(id, 10, 10, false)
+    assertEqual(tfm.get.room.objectList[id].x, 10)
+    assertEqual(tfm.get.room.objectList[id].y, 10)
+    tfm.exec.moveObject(id, 30, 30, false, 100, 100, false)
+    assertEqual(tfm.get.room.objectList[id].x, 30)
+    assertEqual(tfm.get.room.objectList[id].y, 30)
+    --should move relatively to the current position when the position offset is true
+    tfm.exec.moveObject(id, 50, 50, true)
+    assertEqual(tfm.get.room.objectList[id].x, 80)
+    assertEqual(tfm.get.room.objectList[id].y, 80)
+    --should move relatively to the current position and speed assuming friction=0 and no speed gain before
+    tfm.exec.moveObject(id, 90, 90, true, 20, 20, false)
+    assertEqual(tfm.get.room.objectList[id].x, 190)
+    assertEqual(tfm.get.room.objectList[id].y, 190)
+    --angle tests
+    tfm.exec.moveObject(id, 0, 0, true, nil, nil, nil, 10, false) --absolute angle
+    assertEqual(tfm.get.room.objectList[id].angle, 10)
+    tfm.exec.moveObject(id, 0, 0, true, nil, nil, nil, 45, true) --relative angle
+    assertEqual(tfm.get.room.objectList[id].angle, 55)
+    --should normalize angles
+    tfm.exec.moveObject(id, 0, 0, true, nil, nil, nil, -45, false)
+    assertEqual(tfm.get.room.objectList[id].angle, 360 - 45)
+    tfm.exec.moveObject(id, 0, 0, true, nil, nil, nil, 360 + 45, false)
+    assertEqual(tfm.get.room.objectList[id].angle, 45)
+
     --movePlayer
     assertErrors(tfm.exec.movePlayer) --Should throw errors when called without args
     --should move to the absolute position always, when the position offset is false

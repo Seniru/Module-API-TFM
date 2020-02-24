@@ -221,7 +221,7 @@ function tfm.exec.addPhysicObject(id, xPosition, yPosition, bodyDef)
 end
 
 function tfm.exec.addShamanObject(objectType, xPosition, yPosition, angle, xSpeed, ySpeed, ghost)
-    local obj = Object(objectType, xPosition, yPosition, angle, xSpeed, ySpeed, ghost)
+    local obj = Object(objectType, xPosition, yPosition, angle or 0, xSpeed or 0, ySpeed or 0, not not ghost)
     tfm.get.room.objectList[obj.id] = obj
     print(label('[Map: (+)Sham Obj]') .. '\tID: ' .. obj.id .. ' | Type: ' .. objectType .. ' | X: ' .. xPosition .. ' Y: ' .. yPosition .. ' ...\t\t' .. func('(tfm.exec.addShamanObject)'))
     return obj.id
@@ -452,7 +452,38 @@ function tfm.exec.lowerSyncDelay(playerName)
 end
 
 function tfm.exec.moveObject(objectId, xPosition, yPosition, positionOffset, xSpeed, ySpeed, speedOffset, angle, angleOffset)
-    error('Not implemented')
+    typeAssert('moveObject', 'number', 1, objectId)
+    typeAssert('moveObject', 'number', 2, xPosition)
+    typeAssert('moveObject', 'number', 3, yPosition)
+    xSpeed = xSpeed or 0
+    ySpeed = ySpeed or 0
+    angle = angle or 0
+
+    if tfm.get.room.objectList[objectId] then
+        
+        if not positionOffset then
+            tfm.get.room.objectList[objectId].x = xPosition
+            tfm.get.room.objectList[objectId].y = yPosition
+        else
+            tfm.get.room.objectList[objectId].x = tfm.get.room.objectList[objectId].x + xPosition + xSpeed
+            tfm.get.room.objectList[objectId].y = tfm.get.room.objectList[objectId].y + yPosition + ySpeed
+        end
+        
+        if not angleOffset then
+            tfm.get.room.objectList[objectId].angle = angle
+        else
+            tfm.get.room.objectList[objectId].angle = tfm.get.room.objectList[objectId].angle + angle
+        end
+        --angle normalization
+        local degrees = tfm.get.room.objectList[objectId].angle
+        tfm.get.room.objectList[objectId].angle = (degrees % 360 + 360) % 360
+
+        print(label('[Object: Move]') .. '\tid: ' .. objectId .. ' | x: ' .. xPosition .. ' | y: ' .. yPosition .. ' | positionOffset: ' .. (tostring(not not positionOffset)) .. '\n\t\t\t' ..
+            'xSpeed: ' .. xSpeed .. ' | ySpeed: ' .. ySpeed  .. ' | speedOff: ' .. tostring(not not speedOffset) .. '\n\t\t\t' .. 
+            'angle: ' .. angle .. ' | angleOffset: ' .. tostring(not not angleOffset) .. '\t\t' .. func('(tfm.exec.moveObject)')
+        )
+
+    end
 end
 
 function tfm.exec.movePlayer(playerName, xPosition, yPosition, positionOffset, xSpeed, ySpeed, speedOffset)

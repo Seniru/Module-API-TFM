@@ -490,7 +490,28 @@ function test:tfm()
     assertEqual(tfm.get.room.playerList['souris1'].syncDelay, 400)
 
     assertErrors(tfm.exec.moveObject)
-    assertErrors(tfm.exec.movePlayer)
+    
+    --movePlayer
+    assertErrors(tfm.exec.movePlayer) --Should throw errors when called without args
+    --should move to the absolute position always, when the position offset is false
+    tfm.exec.movePlayer('souris1', 10, 10, false)
+    assertEqual(tfm.get.room.playerList['souris1'].x, 10)
+    assertEqual(tfm.get.room.playerList['souris1'].y, 10)
+    tfm.exec.movePlayer('souris1', 20, 20, false, 30, 30, false)
+    assertEqual(tfm.get.room.playerList['souris1'].x, 20)
+    assertEqual(tfm.get.room.playerList['souris1'].y, 20)
+    --should move relatively to the current position when the position offset is true
+    tfm.exec.movePlayer('souris1', 30, 30, true)
+    assertEqual(tfm.get.room.playerList['souris1'].x, 50)
+    assertEqual(tfm.get.room.playerList['souris1'].y, 50)
+    tfm.exec.movePlayer('souris1', -10, -10, true)
+    assertEqual(tfm.get.room.playerList['souris1'].x, 40)
+    assertEqual(tfm.get.room.playerList['souris1'].y, 40)
+    --should move relatively to the current position and speed assuming friction=0 and no speed gain before
+    tfm.exec.movePlayer('souris1', 10, 10, true, 10, 10)
+    assertEqual(tfm.get.room.playerList['souris1'].x, 60)
+    assertEqual(tfm.get.room.playerList['souris1'].y, 60)
+
     assertErrors(tfm.exec.newGame)
     
     --playEmote

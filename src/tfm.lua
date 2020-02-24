@@ -456,7 +456,24 @@ function tfm.exec.moveObject(objectId, xPosition, yPosition, positionOffset, xSp
 end
 
 function tfm.exec.movePlayer(playerName, xPosition, yPosition, positionOffset, xSpeed, ySpeed, speedOffset)
-    error('Not implemented')
+    typeAssert('movePlayer', 'string', 1, playerName)
+    typeAssert('movePlayer', 'number', 2, xPosition)
+    typeAssert('movePlayer', 'number', 3, yPosition)
+    xSpeed = xSpeed or 0
+    ySpeed = ySpeed or 0
+    if tfm.get.room.playerList[playerName] then
+        if not positionOffset then
+            tfm.get.room.playerList[playerName].x = xPosition
+            tfm.get.room.playerList[playerName].y = yPosition
+        else
+            --assuming no speed gain before
+            tfm.get.room.playerList[playerName].x = tfm.get.room.playerList[playerName].x + xPosition + xSpeed -- assuming no friction
+            tfm.get.room.playerList[playerName].y = tfm.get.room.playerList[playerName].y + yPosition + ySpeed -- assuming no gravity
+        end
+        print(label('[Player: Move]') .. '\t\t\tplayer: ' .. playerName .. ' | x: ' .. xPosition .. ' | y: ' .. yPosition .. ' | positionOffset: ' .. (tostring(not not positionOffset)) .. '\n\t\t\t' ..
+            'xSpeed: ' .. xSpeed .. ' | ySpeed: ' .. ySpeed  .. ' | speedOff: ' .. tostring(not not speedOffset) .. '\t' .. func('(tfm.exec.movePlayer)')
+        )
+    end
 end
 
 function tfm.exec.newGame(mapCode, flipped)

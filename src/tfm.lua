@@ -170,7 +170,8 @@ local tfm = {
             enabledPhysicalConsumables = true,
             enabledPrespawnPreview = true,
             allowedWatchCommand = true,
-            enabledMapFlipMode = nil      
+            enabledMapFlipMode = nil,
+            gameTime = 2 * 60 + 10  
         },
         --[[WARNING!!!: data field is not related with tfm's module API]]--
         data = {
@@ -590,7 +591,16 @@ function tfm.exec.setAutoMapFlipMode(flipped)
 end
 
 function tfm.exec.setGameTime(time, init)
-    error('Not implemented')
+    typeAssert('setGameTime', 'number', 1, time)
+    init = init == nil and true or init
+    if init then
+        tfm.get.room.gameTime = time
+    else
+        if time < tfm.get.room.gameTime then
+            tfm.get.room.gameTime = time
+        end
+    end
+    print(label('[Game: Time]') .. '\t\ttime: ' .. time .. ' | init: ' .. tostring(init) .. '\t\t\t' .. func('(tfm.exec.setGameTime)'))
 end
 
 function tfm.exec.setNameColor(playerName, color)

@@ -604,7 +604,16 @@ function test:tfm()
         assertEqual(tfm.get.room.enabledMapFlipMode, mode)
     end
 
-    assertErrors(tfm.exec.setGameTime)
+    --setGameTime
+    assertErrors(tfm.exec.setGameTime, "infinity") -- Should throw errors for non-number time
+    tfm.exec.setGameTime(90)
+    assertEqual(tfm.get.room.gameTime, 90)
+    tfm.exec.setGameTime(120, true)
+    assertEqual(tfm.get.room.gameTime, 120)
+    tfm.exec.setGameTime(150, false)
+    assertEqual(tfm.get.room.gameTime, 120)
+    tfm.exec.setGameTime(20, false)
+    assertEqual(tfm.get.room.gameTime, 20)
 
     --setNameColor
     assertErrors(tfm.exec.setNameColor) -- Should throw an error when called without args

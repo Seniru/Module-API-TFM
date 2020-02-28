@@ -539,7 +539,25 @@ function test:tfm()
     assertEqual(tfm.get.room.playerList['souris1'].x, 60)
     assertEqual(tfm.get.room.playerList['souris1'].y, 60)
 
-    assertErrors(tfm.exec.newGame)
+    --newGame
+    --when mapCode = nil (random)
+    assertDoesNotError(tfm.exec.newGame)
+    tfm.exec.newGame(nil, true)
+    assertEqual(tfm.get.room.mirroredMap, true)
+    --when mapcode is the map's id (@XXXX or XXXX)
+    tfm.exec.newGame(123456)
+    assertEqual(tfm.get.room.currentMap, "@123456")
+    assertEqual(tfm.get.room.xmlMapInfo.mapCode, 123456)
+    tfm.exec.newGame("@987654")
+    assertEqual(tfm.get.room.currentMap, "@987654")
+    assertEqual(tfm.get.room.xmlMapInfo.mapCode, 987654)
+    --when mapcode is provided as a perm code
+    tfm.exec.newGame("#8")
+    assertEqual(tfm.get.room.currentMap, nil) --we don't know the value
+    assertEqual(tfm.get.room.xmlMapInfo.permCode, 8)
+    --when mapcode is xml
+    tfm.exec.newGame("<C><P /><Z><S /><D /><O /></Z></C>")
+    assertEqual(tfm.get.room.xmlMapInfo.xml, "<C><P /><Z><S /><D /><O /></Z></C>")
     
     --playEmote
     assertErrors(tfm.exec.playEmote) -- Should throw errors when called without args

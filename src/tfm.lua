@@ -156,6 +156,12 @@ local tfm = {
             objectList = {},
             passwordProtected = false,
             playerList = {},
+            xmlMapInfo = {
+                permCode = nil,
+                mapCode = 630022,
+                author = "Tigrounette#0001",
+                xml = "<C><P /><Z><S /><D /><O /></Z></C>"
+            },
       
             --[[WARNING!!!: Fields below are not related with tfm's module API]]--
             enabledAfkDeath = true,
@@ -509,7 +515,51 @@ function tfm.exec.movePlayer(playerName, xPosition, yPosition, positionOffset, x
 end
 
 function tfm.exec.newGame(mapCode, flipped)
-    error("Not implemented")
+    local success = false
+    --checking the mapcode format
+    if mapCode == nil then
+        local randMap = math.random(1, 9999999)
+        tfm.get.room.currentMap = "@" .. randMap
+        tfm.get.room.xmlMapInfo.mapCode = randMap
+        tfm.get.room.xmlMapInfo.permCode = nil
+        tfm.get.room.xmlMapInfo.author = nil
+        tfm.get.room.xmlMapInfo.xml = nil
+        success = true
+    elseif type(mapCode) == "number" then
+        tfm.get.room.currentMap = "@" .. mapCode
+        tfm.get.room.xmlMapInfo.mapCode = mapCode
+        tfm.get.room.xmlMapInfo.permCode = nil
+        tfm.get.room.xmlMapInfo.author = nil
+        tfm.get.room.xmlMapInfo.xml = nil
+        success = true
+    elseif mapCode:find("^@?%d+$") then
+        tfm.get.room.currentMap = mapCode
+        tfm.get.room.xmlMapInfo.mapCode = tonumber(mapCode:match("@(%d+)"))
+        tfm.get.room.xmlMapInfo.permCode = nil
+        tfm.get.room.xmlMapInfo.author = nil
+        tfm.get.room.xmlMapInfo.xml = nil
+        success = true
+    elseif mapCode:find("^#%d+$") then
+        tfm.get.room.currentMap = nil
+        tfm.get.room.xmlMapInfo.mapCode = nil
+        tfm.get.room.xmlMapInfo.permCode = tonumber(mapCode:match("#(%d+)"))
+        tfm.get.room.xmlMapInfo.author = nil
+        tfm.get.room.xmlMapInfo.xml = nil
+        success = true
+    elseif mapCode:find("^<.+>$") then
+        tfm.get.room.currentMap = mapCode
+        tfm.get.room.xmlMapInfo.mapCode = nil
+        tfm.get.room.xmlMapInfo.permCode = nil
+        tfm.get.room.xmlMapInfo.author = nil
+        tfm.get.room.xmlMapInfo.xml = mapCode
+        success = true
+    end
+    
+    if success then
+        tfm.get.room.mirroredMap = flipped
+        print(label('[Map: New]') .. '\t\tmapCode: ' .. (mapCode == nil and "random" or mapCode) .. " | flipped: " .. tostring(flipped) .. '\t\t' .. func('(tfm.exec.newGame)'))
+    end
+
 end
 
 function tfm.exec.playEmote(playerName, emoteId, emoteArg)
